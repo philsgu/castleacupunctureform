@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Intake Form | Georgina Castle, DACM, MPH</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <div class="app-container">
+        <header class="header">
+            <div class="logo-area">
+                <h1>Castle Acupuncture-New Patient Intake Form</h1>
+                <p>Georgina Castle, DACM, MPH</p>
+            </div>
+            <div class="progress-container">
+                <div class="progress-bar" id="progressBar"></div>
+                <div class="step-indicator" data-step="1">1</div>
+                <div class="step-indicator" data-step="2">2</div>
+                <div class="step-indicator" data-step="3">3</div>
+                <div class="step-indicator" data-step="4">4</div>
+                <div class="step-indicator" data-step="5">5</div>
+                <div class="step-indicator" data-step="6">6</div>
+                <div class="step-indicator" data-step="7">7</div>
+            </div>
+        </header>
+
+        <main class="form-container">
+            <form id="intakeForm">
+                <!-- Step 1: Personal Information -->
+                <div class="step active" id="step1">
+                    <h2>Personal Information</h2>
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label for="firstName">First Name</label>
+                            <input type="text" id="firstName" name="firstName" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="lastName">Last Name</label>
+                            <input type="text" id="lastName" name="lastName" required>
+                        </div>
+                    </div>
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label for="dob">Birthdate</label>
+                            <input type="date" id="dob" name="dob" required>
+                        </div>
+                        <div class="input-group required">
+                            <label>Sex</label>
+                            <div class="radio-group">
+                                <label class="radio-card">
+                                    <input type="radio" name="sex" value="Male" required>
+                                    <span>Male</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="sex" value="Female">
+                                    <span>Female</span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="address">Address</label>
+                        <input type="text" id="address" name="address" required>
+                    </div>
+                    <div class="grid-3">
+                        <div class="input-group">
+                            <label for="city">City</label>
+                            <input type="text" id="city" name="city" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="state">State</label>
+                            <input type="text" id="state" name="state" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="zip">Zip</label>
+                            <input type="text" id="zip" name="zip" required>
+                        </div>
+                    </div>
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="language">Primary Language</label>
+                            <input type="text" id="language" name="language">
+                        </div>
+                    </div>
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label for="cellPhone">Cell Phone</label>
+                            <input type="tel" id="cellPhone" name="cellPhone" required>
+                        </div>
+                        <div class="input-group">
+                            <label for="otherPhone">Other Phone</label>
+                            <input type="tel" id="otherPhone" name="otherPhone">
+                        </div>
+                    </div>
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label for="employer">Employer</label>
+                            <input type="text" id="employer" name="employer">
+                        </div>
+                        <div class="input-group">
+                            <label for="occupation">Occupation</label>
+                            <input type="text" id="occupation" name="occupation">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Current Condition -->
+                <div class="step" id="step2">
+                    <h2>Current Condition</h2>
+                    <div class="input-group">
+                        <label>Are you under the care of a physician?</label>
+                        <div class="radio-group">
+                            <label class="radio-card">
+                                <input type="radio" name="underCare" value="No"
+                                    onclick="toggleField('physicianCondition', false)">
+                                <span>No</span>
+                            </label>
+                            <label class="radio-card">
+                                <input type="radio" name="underCare" value="Yes"
+                                    onclick="toggleField('physicianCondition', true)">
+                                <span>Yes</span>
+                            </label>
+                        </div>
+                        <input type="text" id="physicianCondition" name="physicianCondition"
+                            placeholder="For what condition?" class="hidden mt-2">
+                    </div>
+                    <div class="input-group">
+                        <label for="currentProblem">Please describe your current health problem(s)</label>
+                        <textarea id="currentProblem" name="currentProblem" rows="3"></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label for="problemOnset">How and When it began</label>
+                        <textarea id="problemOnset" name="problemOnset" rows="2"></textarea>
+                    </div>
+                    <div class="input-group">
+                        <label>What treatment have you received for the above conditions(s)?</label>
+                        <div class="checkbox-grid">
+                            <label class="checkbox-pill"><input type="checkbox" name="treatment" value="Surgery">
+                                Surgery</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="treatment" value="Medications">
+                                Medications</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="treatment"
+                                    value="Physical Therapy"> Physical Therapy</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="treatment" value="Yes">
+                                Yes</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="treatment" value="Injections">
+                                Injections</label>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label>Is this work related?</label>
+                        <div class="radio-group">
+                            <label class="radio-card">
+                                <input type="radio" name="workRelated" value="Yes">
+                                <span>Yes</span>
+                            </label>
+                            <label class="radio-card">
+                                <input type="radio" name="workRelated" value="No">
+                                <span>No</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Progress So Far</label>
+                        <select name="progress" id="progress">
+                            <option value="">Select Progress</option>
+                            <option value="Worse">Worse</option>
+                            <option value="No change">No change</option>
+                            <option value="25% Better">25% Better</option>
+                            <option value="50% Better">50% Better</option>
+                            <option value="75% Better">75% Better</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Step 3: Pain & Symptoms -->
+                <div class="step" id="step3">
+                    <h2>Pain & Symptoms</h2>
+                    <div class="input-group">
+                        <label>Current Pain Areas</label>
+                        <div class="checkbox-grid small">
+                            <label class="checkbox-pill"><input type="checkbox" name="painArea" value="Abdomen">
+                                Abdomen</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="painArea" value="Ankle">
+                                Ankle</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="painArea" value="Arm"> Arm</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="painArea" value="Chest">
+                                Chest</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="painArea" value="Elbow">
+                                Elbow</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="painArea" value="Foot">
+                                Foot</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="painArea" value="Hand">
+                                Hand</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="painArea" value="Head">
+                                Head</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="painArea" value="Hip"> Hip</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="painArea" value="Jaw"> Jaw</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="painArea" value="Knee">
+                                Knee</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="painArea" value="Low Back"> Low
+                                Back</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="painArea" value="Neck">
+                                Neck</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="painArea" value="Shoulder">
+                                Shoulder</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="painArea" value="Tailbone">
+                                Tailbone</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="painArea" value="Thigh">
+                                Thigh</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="painArea" value="Upper Back">
+                                Upper Back</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="painArea" value="Wrist">
+                                Wrist</label>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="painLevel">Pain Level (0 - 10)</label>
+                        <div class="range-container">
+                            <input type="range" id="painLevel" name="painLevel" min="0" max="10" value="0"
+                                oninput="this.nextElementSibling.value = this.value">
+                            <output>0</output>
+                        </div>
+                        <div class="range-labels">
+                            <span>No Pain</span>
+                            <span>Unbearable</span>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="painInterference">interference with Daily Activities (0 - 10)</label>
+                        <div class="range-container">
+                            <input type="range" id="painInterference" name="painInterference" min="0" max="10" value="0"
+                                oninput="this.nextElementSibling.value = this.value">
+                            <output>0</output>
+                        </div>
+                        <div class="range-labels">
+                            <span>None</span>
+                            <span>Unable to carry on</span>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label>Symptom Frequency</label>
+                        <select name="symptomFrequency">
+                            <option value="" disabled selected>Please Select</option>
+                            <option value="Constantly">Constantly</option>
+                            <option value="Frequently">Frequently</option>
+                            <option value="Intermittently">Intermittently</option>
+                            <option value="Occasionally">Occasionally</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>General Health Condition</label>
+                        <div class="radio-group wrap">
+                            <label class="radio-card"><input type="radio" name="healthCondition" value="Excellent">
+                                <span>Excellent</span></label>
+                            <label class="radio-card"><input type="radio" name="healthCondition" value="Very Good">
+                                <span>Very Good</span></label>
+                            <label class="radio-card"><input type="radio" name="healthCondition" value="Good">
+                                <span>Good</span></label>
+                            <label class="radio-card"><input type="radio" name="healthCondition" value="Fair">
+                                <span>Fair</span></label>
+                            <label class="radio-card"><input type="radio" name="healthCondition" value="Poor">
+                                <span>Poor</span></label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 4: Medical History -->
+                <div class="step" id="step4">
+                    <h2>Medical History</h2>
+                    <p class="subtitle">Check all that apply to you</p>
+                    <div class="input-group">
+                        <label>Tobacco Use</label>
+                        <div class="radio-group">
+                            <label class="radio-card">
+                                <input type="radio" name="tobaccoUseRef" value="No">
+                                <span>No</span>
+                            </label>
+                            <label class="radio-card">
+                                <input type="radio" name="tobaccoUseRef" value="Yes" id="tobaccoUseYes">
+                                <span>Yes</span>
+                            </label>
+                        </div>
+                        <!-- Hidden details block remains the same, triggered by 'Yes' radio -->
+                        <div id="tobaccoDetails" class="grid-2 hidden mt-2">
+                            <div class="input-group">
+                                <label for="tobaccoType">Type</label>
+                                <input type="text" id="tobaccoType" name="tobaccoType"
+                                    placeholder="e.g. Cigarettes, Vape">
+                            </div>
+                            <div class="input-group">
+                                <label for="tobaccoFrequency">Frequency / Day</label>
+                                <input type="text" id="tobaccoFrequency" name="tobaccoFrequency"
+                                    placeholder="e.g. 1 pack">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label>Conditions (Check all that apply)</label>
+                        <div class="checkbox-grid small">
+                            <label class="checkbox-pill"><input type="checkbox" name="history"
+                                    value="Alcohol/Drug Dependence"> Alcohol/Drug Dependence</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="history" value="Allergies">
+                                Allergies</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="history" value="Angina">
+                                Angina</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="history" value="Arthritis">
+                                Arthritis</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="history"
+                                    value="Artificial Joints">
+                                Artificial Joints</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="history" value="Asthma">
+                                Asthma</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="history" value="Blood Disorder">
+                                Blood Disorder</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="history" value="Breast Lumps">
+                                Breast Lumps</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="history" value="Cancer/Tumor">
+                                Cancer/Tumor</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="history"
+                                    value="Convulsion/Seizures">
+                                Convulsion/Seizures</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="history" value="Diabetes">
+                                Diabetes</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="history"
+                                    value="Diarrhea/Constipation"> Diarrhea/Constipation</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="history" value="Excessive Thirst">
+                                Excessive Thirst</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="history"
+                                    value="Fainting/Dizziness">
+                                Fainting/Dizziness</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="history" value="Fatigue">
+                                Fatigue</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="history" value="Fever">
+                                Fever</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="history" value="Headache">
+                                Headache</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="history" value="Heart Attack">
+                                Heart Attack</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="history"
+                                    value="Heartburn/Indigestion"> Heartburn/Indigestion</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="history" value="Hypertension">
+                                Hypertension</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="history" value="Kidney Disease">
+                                Kidney Disease</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="history" value="Liver Problems">
+                                Liver Problems</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="history" value="Osteoporosis">
+                                Osteoporosis</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="history" value="Pacemaker">
+                                Pacemaker</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="history"
+                                    value="Palpitation/Arrhythmia"> Palpitation/Arrhythmia</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="history" value="Peptic Ulcer">
+                                Peptic Ulcer</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="history"
+                                    value="Prostate Problems">
+                                Prostate Problems</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="history" value="Sinusitis">
+                                Sinusitis</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="history" value="Stroke">
+                                Stroke</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="history" value="Thyroid Disease">
+                                Thyroid Disease</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="history" value="Weight Gain/Loss">
+                                Weight Gain/Loss</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="history" value="Other"
+                                    id="otherConditionCheck">
+                                Other</label>
+                        </div>
+                        <div id="otherConditionContainer" class="hidden mt-2">
+                            <label for="otherConditionText">If 'Other', please specify:</label>
+                            <input type="text" id="otherConditionText" name="otherConditionText" class="mt-1">
+                        </div>
+                    </div>
+                    <div class="input-group mt-4">
+                        <label for="medications">List any medications you are taking:</label>
+                        <textarea id="medications" name="medications" rows="3"></textarea>
+                    </div>
+
+                    <div class="input-group mt-4">
+                        <label class="mb-2">If the family member has had any of the following, please mark the box and
+                            explain the relationship:</label>
+                        <div class="grid-2">
+                            <div class="input-group">
+                                <label class="checkbox-pill"><input type="checkbox" name="familyHistory" value="Cancer">
+                                    Cancer</label>
+                                <input type="text" name="familyHistoryRel_Cancer" placeholder="Relationship"
+                                    class="mt-2">
+                            </div>
+                            <div class="input-group">
+                                <label class="checkbox-pill"><input type="checkbox" name="familyHistory"
+                                        value="Heart Disease"> Heart Disease</label>
+                                <input type="text" name="familyHistoryRel_Heart" placeholder="Relationship"
+                                    class="mt-2">
+                            </div>
+                            <div class="input-group">
+                                <label class="checkbox-pill"><input type="checkbox" name="familyHistory"
+                                        value="Hypertension"> Hypertension</label>
+                                <input type="text" name="familyHistoryRel_Hypertension" placeholder="Relationship"
+                                    class="mt-2">
+                            </div>
+                            <div class="input-group">
+                                <label class="checkbox-pill"><input type="checkbox" name="familyHistory" value="Lupus">
+                                    Lupus</label>
+                                <input type="text" name="familyHistoryRel_Lupus" placeholder="Relationship"
+                                    class="mt-2">
+                            </div>
+                            <div class="input-group">
+                                <label class="checkbox-pill"><input type="checkbox" name="familyHistory" value="Other"
+                                        id="familyHistoryOtherCheck"> Other</label>
+                                <div id="familyHistoryOtherDetails" class="hidden mt-2">
+                                    <input type="text" name="familyHistoryOtherSpec" placeholder="Specify Condition"
+                                        class="mb-2">
+                                    <input type="text" name="familyHistoryRel_Other" placeholder="Relationship">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="input-group hidden" id="mensesContainer">
+                        <label for="lastMenses">Last Menses Date</label>
+                        <input type="date" id="lastMenses" name="lastMenses">
+                    </div>
+                </div>
+
+                <!-- Step 5: Terms and Conditions -->
+                <div class="step" id="step5">
+                    <h2>Terms and Conditions of Service</h2>
+
+                    <div class="input-group mb-4">
+                        <label>Are you the patient?</label>
+                        <div class="radio-group" id="signerToggleGroup">
+                            <label class="radio-card">
+                                <input type="radio" name="isPatientSigner" value="Yes">
+                                <span>Yes</span>
+                            </label>
+                            <label class="radio-card">
+                                <input type="radio" name="isPatientSigner" value="No">
+                                <span>No</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="legal-text-container">
+                        <h3>Admission and Medical Services Agreement:</h3>
+                        <p>The patient or the patient's representative consents to the admission of the patient to
+                            Georgina Castle, DACM, MPH if this is deemed necessary for the care of the patients. All the
+                            terms and conditions hereof also apply to such admissions.</p>
+
+                        <h3>Medical Consent:</h3>
+                        <p>I have read and fully understand that the patient accepts the full responsibility to follow
+                            up the medical advice given by Georgina Castle, DACM, MPH the patient or the patient's
+                            representative consents to the treatment procedures and its results and repercussions
+                            thereof and accepts arbitration if deemed necessary.</p>
+
+                        <h3>Release of Information:</h3>
+                        <p>Georgina Castle, DACM, MPH is authorized to furnish from the patients records necessary
+                            information to the referring physician, if any, and to others to the extent required in
+                            connection with a claim for aid, insurance, or medical assistance to which the patient may
+                            be entitled. The patient or his/her medical records from previous medical history rendered
+                            by other physicians or medical centers.</p>
+
+                        <h3>Financial Agreement:</h3>
+                        <p>The patient or patient's representative shall pay Georgina Castle, DACM, MPH services
+                            rendered in accordance with the regular rates and terms by Georgina Castle, DACM, MPH. When
+                            this agreement is executed by the patient or the patient's representative or a financial
+                            guarantor, all shall be jointly and individually liable for the patient. Should accounts be
+                            referred to an attorney or collection agency, reasonable attorney's fees and collections
+                            expenses incurred shall be payable in addition to the other amounts due.</p>
+
+                        <h3>48-Hour Cancellation and Missed Appointment Policy:</h3>
+                        <p>Please let us know if you need to cancel or reschedule an appointment. Failure to provide
+                            48-hour notice or failure to show will result in your account being charged for the
+                            visitation at our standard fee of $95. Your insurance carrier is not responsible for this
+                            fee.</p>
+
+                        <p class="mt-4"><strong>Georgina Castle, DACM, MPH and patient or the patient's representative
+                                hereby enter into this agreement. The patient or the patient's representative certifies
+                                that he/she has read and accepted the "Terms and Conditions of Service."</strong></p>
+                    </div>
+
+                    <div class="grid-2 mt-4">
+                        <!-- Patient Signature -->
+                        <div class="input-group">
+                            <label>Signature of Patient</label>
+                            <div id="sigTermsPatientContainer" class="signature-display-area"
+                                onclick="openSignatureModal('sigTermsPatient')">
+                                <span class="placeholder-text">Click to Sign</span>
+                                <img id="sigTermsPatientImage" class="hidden" alt="Patient Signature">
+                            </div>
+                            <input type="hidden" id="sigTermsPatientData" name="sigTermsPatientData">
+                        </div>
+                        <!-- Date Auto-filled -->
+                        <div class="input-group" id="sigTermsPatientDateContainer">
+                            <label>Date</label>
+                            <input type="date" id="sigTermsPatientDate" name="sigTermsPatientDate" readonly>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <!-- Rep Signature -->
+                        <div class="input-group">
+                            <label>Signature of Representative</label>
+                            <div id="sigTermsRepContainer" class="signature-display-area"
+                                onclick="openSignatureModal('sigTermsRep')">
+                                <span class="placeholder-text">Click to Sign</span>
+                                <img id="sigTermsRepImage" class="hidden" alt="Rep Signature">
+                            </div>
+                            <input type="hidden" id="sigTermsRepData" name="sigTermsRepData">
+                        </div>
+                        <!-- Date Auto-filled -->
+                        <div class="input-group" id="sigTermsRepDateContainer">
+                            <label>Date</label>
+                            <input type="date" id="sigTermsRepDate" name="sigTermsRepDate" readonly>
+                        </div>
+                    </div>
+
+                    <hr class="my-6">
+
+                    <h3>Acknowledgement of Receipt of Notice of Privacy Practices:</h3>
+                    <div class="input-group inline-text-input">
+                        <p>I, <input type="text" name="privacyName" placeholder="Name" class="inline-input"> do hereby
+                            acknowledge receipt of a copy of the Notice of Privacy Practices, Polices, and Procedures
+                            from Georgina Castle, DACM, MPH.</p>
+                    </div>
+
+                    <div class="grid-2 mt-4">
+                        <!-- Privacy Patient Sig -->
+                        <div class="input-group">
+                            <label>Signature of Patient</label>
+                            <div id="sigPrivacyPatientContainer" class="signature-display-area"
+                                onclick="openSignatureModal('sigPrivacyPatient')">
+                                <span class="placeholder-text">Click to Sign</span>
+                                <img id="sigPrivacyPatientImage" class="hidden" alt="Patient Signature">
+                            </div>
+                            <input type="hidden" id="sigPrivacyPatientData" name="sigPrivacyPatientData">
+                        </div>
+                        <div class="input-group" id="sigPrivacyPatientDateContainer">
+                            <label>Date</label>
+                            <input type="date" id="sigPrivacyPatientDate" name="sigPrivacyPatientDate" readonly>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <!-- Privacy Rep Sig -->
+                        <div class="input-group">
+                            <label>Signature of Representative</label>
+                            <div id="sigPrivacyRepContainer" class="signature-display-area"
+                                onclick="openSignatureModal('sigPrivacyRep')">
+                                <span class="placeholder-text">Click to Sign</span>
+                                <img id="sigPrivacyRepImage" class="hidden" alt="Rep Signature">
+                            </div>
+                            <input type="hidden" id="sigPrivacyRepData" name="sigPrivacyRepData">
+                        </div>
+                        <div class="input-group" id="sigPrivacyRepDateContainer">
+                            <label>Date</label>
+                            <input type="date" id="sigPrivacyRepDate" name="sigPrivacyRepDate" readonly>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 6: Arbitration Agreement -->
+                <div class="step hidden" id="step6">
+                    <h2>Arbitration Agreement</h2>
+                    <div class="legal-text-container">
+                        <h3>Article 1: Agreement to Arbitrate:</h3>
+                        <p>It is understood that any dispute as to medical malpractice, that is as to whether
+                            any medical services rendered under this contract were unnecessary or unauthorized
+                            or were improperly, negligently or incompetently rendered, will be determined by
+                            submission to arbitration as provided by California and federal law, and not by a
+                            lawsuit or resort to court process except as California and federal law provide for
+                            judicial review of arbitration proceedings...</p>
+
+                        <h3>Article 2: All Claims Must be Arbitrated:</h3>
+                        <p>It is also understood that any dispute that does not relate to medical malpractice,
+                            including disputes as to whether or not a dispute is subject to arbitration, as to
+                            whether this agreement is unconscionable, and any procedural disputes, will also be
+                            determined by submission to binding arbitration...</p>
+
+                        <h3>Article 3: Procedures and Applicable Law:</h3>
+                        <p>A demand for arbitration must be communicated in writing to all parties. Each party
+                            shall select an arbitrator (party arbitrator) within thirty days, and a third
+                            arbitrator (neutral arbitrator) shall be selected by the arbitrators appointed by
+                            the parties within thirty days thereafter...</p>
+
+                        <h3>Article 4: General Provision:</h3>
+                        <p>All claims based upon the same incident, transaction, or related circumstances shall
+                            be arbitrated in one proceeding...</p>
+
+                        <h3>Article 5: Revocation:</h3>
+                        <p>This agreement may be revoked by written notice delivered to the healthcare provider
+                            within 30 days of signature and, if not revoked, will govern all professional
+                            services received by the patient and all other disputes between the parties.</p>
+
+                        <h3>Article 6: Retroactive Effect:</h3>
+                        <div class="input-group">
+                            <p>If patient intends this agreement to cover services rendered before the date it
+                                is signed (for example, emergency treatment), please select Yes and initial below.</p>
+
+                            <div class="radio-group mt-2 mb-2">
+                                <label class="radio-card">
+                                    <input type="radio" name="retroactiveCoverage" value="Yes"
+                                        onclick="toggleField('retroactiveInitialContainer', true)">
+                                    <span>Yes</span>
+                                </label>
+                                <label class="radio-card">
+                                    <input type="radio" name="retroactiveCoverage" value="No"
+                                        onclick="toggleField('retroactiveInitialContainer', false)">
+                                    <span>No</span>
+                                </label>
+                            </div>
+
+                            <div id="retroactiveInitialContainer" class="hidden mt-2">
+                                <label>Patient Initial (Mandatory if Yes):</label>
+                                <input type="text" name="arbitrationInitial" class="inline-input short"
+                                    placeholder="Initials">
+                                <span>Effective as of the date of first professional services.</span>
+                            </div>
+                        </div>
+
+                        <p>If any provision of this Arbitration Agreement is held invalid or unenforceable, the
+                            remaining provisions shall remain in full force and shall not be affected by the
+                            invalidity of any other provision.</p>
+
+                        <p class="warning-text mt-4"><strong>NOTICE: BY SIGNING THIS CONTRACT YOU ARE AGREEING
+                                TO HAVE ANY ISSUE OF MEDICAL MALPRACTICE DECIDED BY NEUTRAL ARBITRATION AND YOU
+                                ARE GIVING UP YOUR RIGHT TO A JURY OR COURT TRIAL. SEE ARTICLE 1 OF THIS
+                                CONTRACT.</strong></p>
+                    </div>
+
+                    <div class="grid-2 mt-4" id="sec6PatientBlock">
+                        <!-- Patient Signature -->
+                        <div class="input-group">
+                            <label>Patient Name (print)</label>
+                            <input type="text" name="arbPatientName">
+                        </div>
+                        <div class="grid-2 col-span-2"> <!-- Nested grid for sig + date -->
+                            <div class="input-group">
+                                <label>Signature</label>
+                                <div id="sigArbPatientContainer" class="signature-display-area"
+                                    onclick="openSignatureModal('sigArbPatient')">
+                                    <span class="placeholder-text">Click to Sign</span>
+                                    <img id="sigArbPatientImage" class="hidden" alt="Patient Signature">
+                                </div>
+                                <input type="hidden" id="sigArbPatientData" name="sigArbPatientData">
+                            </div>
+                            <div class="input-group">
+                                <label>Date</label>
+                                <input type="date" id="sigArbPatientDate" name="sigArbPatientDate" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid-2" id="sec6GuardianBlock">
+                        <!-- Parent/Guardian Signature -->
+                        <div class="input-group">
+                            <label id="arbGuardianNameLabel">Parent or Guardian (print)</label>
+                            <input type="text" name="arbGuardianName">
+                        </div>
+                        <div class="grid-2 col-span-2">
+                            <div class="input-group">
+                                <label id="sigArbGuardianLabel">Signature</label>
+                                <div id="sigArbGuardianContainer" class="signature-display-area"
+                                    onclick="openSignatureModal('sigArbGuardian')">
+                                    <span class="placeholder-text">Click to Sign</span>
+                                    <img id="sigArbGuardianImage" class="hidden" alt="Guardian Signature">
+                                </div>
+                                <input type="hidden" id="sigArbGuardianData" name="sigArbGuardianData">
+                            </div>
+                            <div class="input-group">
+                                <label>Date</label>
+                                <input type="date" id="sigArbGuardianDate" name="sigArbGuardianDate" readonly>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid-2">
+                        <!-- Office Signature -->
+                        <div class="input-group">
+                            <label>Office Name</label>
+                            <input type="text" name="arbOfficeName" value="Georgina Castle, DACM, MPH" readonly>
+                        </div>
+                        <div class="grid-2 col-span-2">
+                            <div class="input-group">
+                                <label>Signature</label>
+                                <div id="sigArbOfficeContainer" class="signature-display-area"
+                                    onclick="openSignatureModal('sigArbOffice')">
+                                    <span class="placeholder-text">Click to Sign</span>
+                                    <img id="sigArbOfficeImage" class="hidden" alt="Office Signature">
+                                </div>
+                                <input type="hidden" id="sigArbOfficeData" name="sigArbOfficeData">
+                            </div>
+                            <div class="input-group">
+                                <label>Date</label>
+                                <input type="date" id="sigArbOfficeDate" name="sigArbOfficeDate" readonly>
+                            </div>
+                        </div> <!-- End Grid for Office Sig -->
+                    </div> <!-- End Grid-2 Office -->
+                </div> <!-- End Step 6 -->
+
+                <!-- Step 7: Informed Consent -->
+                <div class="step hidden" id="step7">
+                    <h2>Acupuncture Informed Consent to Treat</h2>
+                    <div class="legal-text-container">
+                        <p>I understand that I am the decision maker for my health care. Part of this office's role is
+                            to provide me
+                            with information to assist me in making informed choices...</p>
+                        <p>I hereby request and consent to the performance of acupuncture treatments and other
+                            procedures within the
+                            scope of the practice of acupuncture on me...</p>
+                        <p>I understand that methods of treatment may include, but are not limited to, acupuncture,
+                            moxibustion,
+                            cupping, electrical stimulation, Tui-Na (Chinese massage)...</p>
+                        <p>I appreciate that it is not possible to consider every possible complication to care. I have
+                            been
+                            informed that acupuncture is a generally safe method of treatment...</p>
+                        <p>I understand that while this document describes the major risks of treatment, other side
+                            effects and
+                            risks may occur...</p>
+                        <p>While I do not expect the clinical staff to be able to anticipate and explain all possible
+                            risks and
+                            complications of treatment, I wish to rely on the clinical staff to exercise judgment...</p>
+                        <p>I understand that I must inform, and continue to fully inform, this office of any medical
+                            history, family
+                            history, medications, and/or supplements being taken currently...</p>
+                        <p>I understand that there are treatment options available for my condition other than
+                            acupuncture
+                            procedures...</p>
+                        <p>By voluntarily signing below, I confirm that I have read, or have had read to me, the above
+                            consent to
+                            treatment, have been told about the risks and benefits...</p>
+
+                        <p class="mt-4"><strong>Both parties agree that this agreement may be electronically signed, and
+                                that the
+                                electronic signatures appearing on this agreement are the same as handwritten signatures
+                                for the
+                                purposes of validity, enforceability, and admissibility.</strong></p>
+                    </div>
+
+                    <div class="input-group mt-4">
+                        <label>Patient Name:</label>
+                        <input type="text" name="consentPatientName">
+                    </div>
+                    <div class="input-group">
+                        <label>Acupuncturist Name:</label>
+                        <input type="text" name="consentAcupuncturistName" value="Georgina Castle, DACM, MPH" readonly>
+                    </div>
+
+                    <div class="grid-2 mt-6">
+                        <!-- Consent Patient Sig -->
+                        <div class="grid-2 col-span-2">
+                            <div class="input-group">
+                                <label id="sigConsentLabel">Patient Signature (<strong>X</strong>)</label>
+                                <div id="sigConsentPatientContainer" class="signature-display-area"
+                                    onclick="openSignatureModal('sigConsentPatient')">
+                                    <span class="placeholder-text">Click to Sign</span>
+                                    <img id="sigConsentPatientImage" class="hidden" alt="Patient Signature">
+                                </div>
+                                <input type="hidden" id="sigConsentPatientData" name="sigConsentPatientData">
+                            </div>
+                            <div class="input-group">
+                                <label>Date</label>
+                                <input type="date" id="sigConsentPatientDate" name="sigConsentPatientDate" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group" id="consentRelationshipContainer">
+                        <label>(Or Patient Representative) Indicate relationship if signing for patient</label>
+                        <input type="text" name="consentRelationship">
+                    </div>
+                </div>
+
+                <div class="form-navigation">
+                    <button type="button" id="prevBtn" class="btn btn-secondary" disabled>Back</button>
+                    <button type="button" id="nextBtn" class="btn btn-primary">Next</button>
+                </div>
+            </form>
+        </main>
+    </div>
+
+    <!-- Signature Modal -->
+    <div id="signatureModal" class="modal-overlay hidden">
+        <div class="modal-content">
+            <h3>Sign Here</h3>
+            <div class="canvas-wrapper">
+                <canvas id="signatureCanvas"></canvas>
+            </div>
+            <div class="modal-actions">
+                <button type="button" class="btn btn-secondary" onclick="clearSignature()">Clear</button>
+                <div class="right-actions">
+                    <button type="button" class="btn btn-secondary" onclick="closeSignatureModal()">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="saveSignature()">Save Signature</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
