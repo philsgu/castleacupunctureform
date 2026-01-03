@@ -5,6 +5,7 @@ import { PDFDocument, rgb, StandardFonts } from "pdf-lib";
 import { Resend } from "resend";
 import { Buffer } from "buffer";
 import { PDF_TEMPLATE } from "./template";
+import { OFFICE_SIG_BASE64 } from "./assets";
 
 export const submitAndNotify = action({
     args: {
@@ -58,7 +59,7 @@ export const submitAndNotify = action({
         }
 
         // Certification
-        y = 200;
+        y = 240;
         const certText = `I certify that the above information is complete and accurate to the best of my knowledge. If the health 
 plan information is not accurate, or if I am not eligible to receive a healthcare benefit through this 
 practitioner, I understand that I am liable for all charges for services. I agreed to notify this practitioner 
@@ -69,7 +70,7 @@ acupuncture services to contact my medical doctor if necessary.`;
 
         summaryPage.drawText(certText, { x: margin, y, size: 9, font, lineHeight: 12 });
 
-        y -= 80;
+        y = 100;
         summaryPage.drawText("Patient signature ______________________________________________________ Date __________", { x: margin, y, size: 10, font: boldFont });
 
         if (data.sigTermsPatientData && data.sigTermsPatientData.startsWith('data:image/')) {
@@ -91,33 +92,49 @@ acupuncture services to contact my medical doctor if necessary.`;
         newPdf.addPage(page4);
 
         // --- MAPPING CONFIGURATION ---
-        // Coordinates are Top-Left based from user. PDF-Lib is Bottom-Left.
-        // y_draw = page_height - user_top - user_height (to get bottom-left of box)
-        // Actually pdf-lib y is bottom-up. 
-        // If user says Top=562. Page Height=792.
-        // The "Top" of the box is at 562 from top. 
-        // The "Bottom" of the box is at 562 + Height from top.
-        // In PDF coords (0 at bottom):
-        // y = 792 - (UserTop + UserHeight) ? Or just 792 - UserTop?
-        // Let's assume UserTop is the top edge. 
-        // Drawing usually specifies bottom-left corner.
-        // So y = 792 - (UserTop + UserHeight).
-
         const pageHeight = 792;
 
         // Helper
-        const drawContent = async (page: any, type: 'sig' | 'date' | 'text', key: string | null, left: number, top: number, w: number, h: number, textValue?: string) => {
+        const drawContent = async (page: any, type: 'sig' | 'date' | 'text', key: string | null, left: number, top: number, w: number, h: number, textValue?: string, dateDependencyKey?: string) => {
             const y = pageHeight - (top + h); // Convert Top-Left layout to Bottom-Left Y
 
             if (type === 'sig' && key) {
-                const sigData = data[key + 'Data'];
+                let sigData = null;
+                if (key === 'sigArbOffice') {
+                    sigData = OFFICE_SIG_BASE64;
+                } else {
+                    sigData = data[key + 'Data'];
+                }
+
                 if (sigData && sigData.startsWith('data:image/')) {
-                    const img = await newPdf.embedPng(sigData.split(',')[1]);
+                    // Check if png or jpeg
+                    let img;
+                    if (sigData.includes('image/jpeg')) {
+                        img = await newPdf.embedJpg(sigData.split(',')[1]);
+                    } else {
+                        img = await newPdf.embedPng(sigData.split(',')[1]);
+                    }
                     page.drawImage(img, { x: left, y, width: w, height: h });
                 }
             } else if (type === 'date') {
-                const dateStr = new Date().toLocaleDateString();
-                page.drawText(dateStr, { x: left, y: y + (h / 4), size: 10, font });
+                // Date Dependency Logic
+                let shouldDrawDate = true;
+                if (dateDependencyKey) {
+                    // Check if signature exists
+                    let sigData = data[dateDependencyKey + 'Data'];
+                    if (dateDependencyKey === 'sigArbOffice') {
+                        sigData = OFFICE_SIG_BASE64;
+                    }
+
+                    if (!sigData || !sigData.startsWith('data:image/')) {
+                        shouldDrawDate = false;
+                    }
+                }
+
+                if (shouldDrawDate) {
+                    const dateStr = new Date().toLocaleDateString();
+                    page.drawText(dateStr, { x: left, y: y + (h / 4), size: 10, font });
+                }
             } else if (type === 'text') {
                 const txt = textValue || (key ? (data[key] || "") : "");
                 // Construct full name if needed
@@ -129,24 +146,24 @@ acupuncture services to contact my medical doctor if necessary.`;
         };
 
         // --- PAGE 2 MAPPINGS ---
-        // 1. Sig Patient (Top) - Terms?
+        // 1. Sig Patient (Top)
         await drawContent(page2, 'sig', 'sigTermsPatient', 87.74, 562.33, 91.29, 22.26);
         // 2. Date
-        await drawContent(page2, 'date', null, 192.89, 558.92, 51.45, 22.26);
+        await drawContent(page2, 'date', null, 192.89, 558.92, 51.45, 22.26, null, 'sigTermsPatient');
         // 3. Sig Rep (Top)
         await drawContent(page2, 'sig', 'sigTermsRep', 322.99, 559.42, 104.69, 22.26);
         // 4. Date
-        await drawContent(page2, 'date', null, 442.92, 559.22, 49.64, 23.26);
+        await drawContent(page2, 'date', null, 442.92, 559.22, 49.64, 23.26, null, 'sigTermsRep');
         // 5. Patient Name (Bottom)
         await drawContent(page2, 'text', 'patientName', 79.34, 627.9, 176.68, 17.97);
-        // 6. Sig Patient (Bottom) - Privacy?
+        // 6. Sig Patient (Bottom)
         await drawContent(page2, 'sig', 'sigPrivacyPatient', 88.49, 660.82, 95.79, 24.87);
         // 7. Date
-        await drawContent(page2, 'date', null, 201.74, 660.56, 51.03, 24.87);
+        await drawContent(page2, 'date', null, 201.74, 660.56, 51.03, 24.87, null, 'sigPrivacyPatient');
         // 8. Sig Rep (Bottom)
         await drawContent(page2, 'sig', 'sigPrivacyRep', 321.12, 663.71, 112.79, 21.91);
         // 9. Date
-        await drawContent(page2, 'date', null, 444.21, 663.28, 44.13, 21.49);
+        await drawContent(page2, 'date', null, 444.21, 663.28, 44.13, 21.49, null, 'sigPrivacyRep');
 
         // --- PAGE 3 MAPPINGS (Arbitration) ---
         // 1. Patient Name
@@ -154,19 +171,19 @@ acupuncture services to contact my medical doctor if necessary.`;
         // 2. Sig Patient
         await drawContent(page3, 'sig', 'sigArbPatient', 301.04, 661.99, 153.85, 18.68);
         // 3. Date
-        await drawContent(page3, 'date', null, 492.18, 659.97, 73.36, 21.49);
-        // 4. Parent/Guardian Name - we don't have this explicitly in args, check formData
+        await drawContent(page3, 'date', null, 492.18, 659.97, 73.36, 21.49, null, 'sigArbPatient');
+        // 4. Parent/Guardian Name
         await drawContent(page3, 'text', null, 145.09, 683.79, 100.52, 23.15, data.arbGuardianName || "");
         // 5. Sig Guardian
         await drawContent(page3, 'sig', 'sigArbGuardian', 297.42, 685.38, 160.88, 21.81);
         // 6. Date
-        await drawContent(page3, 'date', null, 494.03, 682.13, 79.08, 21.81);
+        await drawContent(page3, 'date', null, 494.03, 682.13, 79.08, 21.81, null, 'sigArbGuardian');
         // 7. Office Name
         await drawContent(page3, 'text', null, 93.47, 709.05, 153.75, 17.31, "Castle Acupuncture");
-        // 8. Signature of Georgina (Office) - sigArbOffice
+        // 8. Signature of Georgina (Office)
         await drawContent(page3, 'sig', 'sigArbOffice', 300.72, 706.96, 158.47, 18.33);
         // 9. Date
-        await drawContent(page3, 'date', null, 493.93, 704.99, 77.19, 18.33);
+        await drawContent(page3, 'date', null, 493.93, 704.99, 77.19, 18.33, null, 'sigArbOffice');
 
         // --- PAGE 4 MAPPINGS (Consent) ---
         // 1. Patient Name (Top)
@@ -176,7 +193,7 @@ acupuncture services to contact my medical doctor if necessary.`;
         // 3. Patient Sig
         await drawContent(page4, 'sig', 'sigConsentPatient', 171.81, 688.98, 158.56, 23.31);
         // 4. Date
-        await drawContent(page4, 'date', null, 372.03, 685.88, 112.65, 23.31);
+        await drawContent(page4, 'date', null, 372.03, 685.88, 112.65, 23.31, null, 'sigConsentPatient');
 
 
         const pdfBytes = await newPdf.save();
