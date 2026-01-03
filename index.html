@@ -30,7 +30,7 @@
             </div>
         </header>
 
-        <main class="form-container">
+        <main class="form-container" id="formContainer">
             <form id="intakeForm">
                 <!-- Step 1: Personal Information -->
                 <div class="step active" id="step1">
@@ -791,6 +791,27 @@
                 </div>
             </form>
         </main>
+
+        <!-- Success Message Container -->
+        <div id="successContainer" class="hidden success-container">
+            <div class="success-content">
+                <div class="success-icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path>
+                        <polyline points="22 4 12 14.01 9 11.01"></polyline>
+                    </svg>
+                </div>
+                <h1>Submission Successful!</h1>
+                <p>Thank you, <span id="successName" class="highlight-text"></span>.</p>
+                <p>Your intake form has been securely sent to Castle Acupuncture.</p>
+                <div class="email-confirmation">
+                    <p>A copy of your signed packet has been sent to:</p>
+                    <p><strong id="successEmail">email@example.com</strong></p>
+                </div>
+                <button class="btn btn-primary" onclick="window.location.reload()">Return to Home</button>
+            </div>
+        </div>
     </div>
 
     <!-- Signature Modal -->

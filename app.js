@@ -540,9 +540,26 @@ document.addEventListener('DOMContentLoaded', () => {
                 formData: data
             });
 
-            alert('Form Submitted & Email Sent!');
-            nextBtn.textContent = 'Submitted';
-            // Optional: Redirect or clear form
+            // alert('Form Submitted & Email Sent!'); // REMOVED
+            // nextBtn.textContent = 'Submitted';
+
+            // Show Success Screen
+            document.getElementById('formContainer').classList.add('hidden');
+            document.getElementById('progressBar').parentElement.classList.add('hidden'); // Hide progress bar too
+
+            const successContainer = document.getElementById('successContainer');
+            successContainer.classList.remove('hidden');
+
+            // Populate Details
+            const firstName = data.firstName || "Patient";
+            const lastName = data.lastName || "";
+            document.getElementById('successName').textContent = `${firstName} ${lastName}`;
+
+            const email = data.email || "your provided email";
+            document.getElementById('successEmail').textContent = email;
+
+            // Optional: Scroll to top
+            window.scrollTo(0, 0);
         } catch (error) {
             console.error("Submission failed:", error);
             alert('Failed to submit form: ' + error.message);
