@@ -1,3 +1,9 @@
+import { ConvexClient } from "convex/browser";
+import { api } from "./convex/_generated/api.js";
+
+// Initialize Convex Client
+const convex = new ConvexClient(import.meta.env.VITE_CONVEX_URL);
+
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('intakeForm');
     const steps = document.querySelectorAll('.step');
@@ -503,7 +509,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return isValid;
     }
 
-    function submitForm() {
+    async function submitForm() {
         // Collect Data
         const formData = new FormData(form);
         const data = {};
@@ -521,16 +527,28 @@ document.addEventListener('DOMContentLoaded', () => {
 
         console.log('Form Data Collected:', data);
 
-        // Simulation
+        // UI Update
         nextBtn.textContent = 'Submitting...';
         nextBtn.disabled = true;
 
-        setTimeout(() => {
-            alert('Form Submitted Automatically! (Check Console for Data Object)');
-            // Optionally reset or redirect
-            // window.location.reload();
+        try {
+            // Using Action to Save + Email
+            await convex.action(api.actions.submitAndNotify, {
+                firstName: data.firstName || "Unknown",
+                lastName: data.lastName || "Unknown",
+                dob: data.dob || "Unknown",
+                formData: data
+            });
+
+            alert('Form Submitted & Email Sent!');
             nextBtn.textContent = 'Submitted';
-        }, 1500);
+            // Optional: Redirect or clear form
+        } catch (error) {
+            console.error("Submission failed:", error);
+            alert('Failed to submit form: ' + error.message);
+            nextBtn.textContent = 'Submit Form';
+            nextBtn.disabled = false;
+        }
     }
 
     // Global toggle function (legacy for Step 2)
