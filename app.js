@@ -14,21 +14,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let currentStep = 1;
 
-    // Set max date for DOB to today
-    const dobInput = document.getElementById('dob');
-    if (dobInput) {
-        // Use PST (America/Los_Angeles) to determine "today" to avoid allowing "tomorrow" 
-        // if the browser relies on UTC while it's still evening in PST.
-        const todayPST = new Intl.DateTimeFormat('en-CA', {
-            timeZone: 'America/Los_Angeles',
-            year: 'numeric',
-            month: '2-digit',
-            day: '2-digit'
-        }).format(new Date());
-
-        dobInput.max = todayPST;
-    }
-
     // Initialize
     updateUI();
     setupValidationListeners();
@@ -39,6 +24,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupSignerToggle(); // New Signer Toggle for Sections 5-7
     setupPhoneFormatting(); // New Phone Formatting
     setupInitialsValidation(); // New Initials Validation
+    setupStrictDateValidation(); // New Strict Date Validation
 
     function setupConditionalFields() {
         // Tobacco Toggle (Radio)
@@ -320,6 +306,31 @@ document.addEventListener('DOMContentLoaded', () => {
                 e.target.value = e.target.value.replace(/[^a-zA-Z]/g, '').toUpperCase();
             });
         }
+    }
+
+    function setupStrictDateValidation() {
+        const todayPST = new Intl.DateTimeFormat('en-CA', {
+            timeZone: 'America/Los_Angeles',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+        }).format(new Date());
+
+        const dateInputs = ['dob', 'lastMenses'];
+        dateInputs.forEach(id => {
+            const input = document.getElementById(id);
+            if (input) {
+                input.max = todayPST;
+                // Add strict listener for iOS/Manual manual entry
+                const validate = (e) => {
+                    if (e.target.value && e.target.value > todayPST) {
+                        e.target.value = ''; // Clear it if future
+                    }
+                };
+                input.addEventListener('change', validate);
+                input.addEventListener('input', validate);
+            }
+        });
     }
 
     function setupNameAutofill() {
@@ -909,10 +920,4 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.beginPath(); // Reset path
     }
 
-    // --- Additional Initialization ---
-    // Restrict Last Menses Date to Today or earlier
-    const lastMenses = document.getElementById('lastMenses');
-    if (lastMenses) {
-        lastMenses.max = new Date().toISOString().split('T')[0];
-    }
 });
