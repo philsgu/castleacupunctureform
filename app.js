@@ -208,6 +208,15 @@ document.addEventListener('DOMContentLoaded', () => {
         phoneInputs.forEach(id => {
             const input = document.getElementById(id);
             if (input) {
+                // Create error message element if it doesn't exist
+                let errorMsg = input.nextElementSibling;
+                if (!errorMsg || !errorMsg.classList.contains('error-message')) {
+                    errorMsg = document.createElement('span');
+                    errorMsg.className = 'error-message';
+                    errorMsg.textContent = 'Phone number must be 10 digits';
+                    input.parentNode.insertBefore(errorMsg, input.nextSibling);
+                }
+
                 input.addEventListener('input', (e) => {
                     let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
                     if (value.length > 10) value = value.slice(0, 10); // Limit to 10 digits
@@ -229,6 +238,20 @@ document.addEventListener('DOMContentLoaded', () => {
                         }
                     }
                     e.target.value = formatted;
+
+                    // Real-time clear error if it reaches 10
+                    if (value.length === 10) {
+                        input.classList.remove('input-error');
+                        input.style.borderColor = '#e2e8f0';
+                    }
+                });
+
+                input.addEventListener('blur', () => {
+                    const value = input.value.replace(/\D/g, '');
+                    if (value.length > 0 && value.length < 10) {
+                        input.classList.add('input-error');
+                        input.style.borderColor = '#ef4444';
+                    }
                 });
             }
         });
@@ -322,7 +345,19 @@ document.addEventListener('DOMContentLoaded', () => {
     function validateField(input) {
         if (input.type === 'radio' || input.type === 'checkbox') return; // Skip radios/checks for blur style
 
-        if (!input.value.trim()) {
+        let isValid = true;
+        const val = input.value.trim();
+
+        if (!val) {
+            isValid = false;
+        } else if (input.id === 'cellPhone' || input.id === 'otherPhone') {
+            const digits = val.replace(/\D/g, '');
+            if (digits.length > 0 && digits.length < 10) {
+                isValid = false;
+            }
+        }
+
+        if (!isValid) {
             input.style.borderColor = '#ef4444';
             input.classList.add('input-error');
         } else {

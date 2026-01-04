@@ -790,4 +790,16 @@ output {
         opacity: 1;
         transform: translateY(0);
     }
+
+}
+
+.error-message {
+    color: #ef4444;
+    font-size: 0.8rem;
+    margin-top: 5px;
+    display: none;
+}
+
+.input-error+.error-message {
+    display: block;
 }
