@@ -114,15 +114,57 @@ export const submitAndNotify = action({
         let y = height - 50;
         const margin = 50;
         const contentWidth = width - 2 * margin;
-
-        summaryPage.drawText(`Patient Intake Summary`, { x: margin, y, size: 18, font: boldFont });
-        y -= 30;
-        summaryPage.drawText(`Patient: ${args.firstName} ${args.lastName}   DOB: ${args.dob}`, { x: margin, y, size: 12, font: boldFont });
-        y -= 25;
-
         const fontSize = 10;
-        summaryPage.drawText("Form Data:", { x: margin, y, size: 12, font: boldFont });
-        y -= 15;
+        const lineHeight = 14;
+
+        // Helper: Format DOB as MM-DD-YYYY
+        const formatDOB = (dob: string) => {
+            if (!dob) return "N/A";
+            const parts = dob.split('-');
+            if (parts.length === 3) {
+                return `${parts[1]}-${parts[2]}-${parts[0]}`;
+            }
+            return dob;
+        };
+
+        // Helper: Draw a section header
+        const drawSectionHeader = (title: string) => {
+            checkPageBreak(40);
+            y -= 10;
+            summaryPage.drawText(title, { x: margin, y, size: 12, font: boldFont });
+            y -= 5;
+            // Draw a line under the header
+            summaryPage.drawLine({
+                start: { x: margin, y },
+                end: { x: margin + contentWidth, y },
+                thickness: 0.5,
+            });
+            y -= 15;
+        };
+
+        // Helper: Draw a field (label + value)
+        const drawField = (label: string, value: string | undefined | null) => {
+            if (!value || value === 'undefined' || value === 'null') return;
+            const sanitized = String(value).replace(/[\n\r\t]+/g, ' ').trim();
+            checkPageBreak(lineHeight + 5);
+            summaryPage.drawText(`${label}: `, { x: margin, y, size: fontSize, font: boldFont });
+            const labelWidth = boldFont.widthOfTextAtSize(`${label}: `, fontSize);
+            const valueLines = wrapText(sanitized, contentWidth - labelWidth, font, fontSize);
+            summaryPage.drawText(valueLines[0], { x: margin + labelWidth, y, size: fontSize, font });
+            y -= lineHeight;
+            for (let i = 1; i < valueLines.length; i++) {
+                checkPageBreak(lineHeight + 5);
+                summaryPage.drawText(valueLines[i], { x: margin + labelWidth, y, size: fontSize, font });
+                y -= lineHeight;
+            }
+        };
+
+        // Helper: Draw a combined field (multiple values on one line)
+        const drawCombinedField = (label: string, values: (string | undefined | null)[]) => {
+            const combined = values.filter(v => v && v !== 'undefined' && v !== 'null').join(', ');
+            if (!combined) return;
+            drawField(label, combined);
+        };
 
         // Helper to check for page break
         const checkPageBreak = (needed: number) => {
@@ -134,43 +176,60 @@ export const submitAndNotify = action({
             return false;
         };
 
-        for (const [key, value] of Object.entries(data)) {
-            // Skip signatures and internal metadata
-            if (key.startsWith('sig') || key === 'formData' || key.includes('Date')) continue;
+        // --- HEADER ---
+        summaryPage.drawText(`Patient Intake Summary`, { x: margin, y, size: 18, font: boldFont });
+        y -= 30;
+        summaryPage.drawText(`Patient: ${args.firstName} ${args.lastName}   DOB: ${formatDOB(args.dob)}`, { x: margin, y, size: 12, font: boldFont });
+        y -= 25;
 
-            const label = FIELD_LABELS[key] || key.charAt(0).toUpperCase() + key.slice(1);
-            let valStr = "";
-            if (Array.isArray(value)) {
-                valStr = value.join(', ');
-            } else {
-                valStr = String(value);
-            }
+        // --- SECTION 1: PATIENT DEMOGRAPHICS ---
+        drawSectionHeader("Section 1: Patient Demographics");
+        drawField("Name", `${args.firstName} ${args.lastName}`);
+        drawField("Date of Birth", formatDOB(args.dob));
+        drawField("Sex", data.sex);
+        drawCombinedField("Address", [data.address, data.city, data.state, data.zip]);
+        drawField("Email", data.email);
+        drawField("Cell Phone", data.cellPhone);
+        drawField("Other Phone", data.otherPhone);
+        drawField("Primary Language", data.language);
+        drawField("Employer", data.employer);
+        drawField("Occupation", data.occupation);
 
-            if (!valStr || valStr === 'undefined' || valStr === 'null') continue;
+        // --- SECTION 2: CURRENT CONDITION ---
+        drawSectionHeader("Section 2: Current Condition");
+        drawField("Under care of physician?", data.underCare);
+        drawField("Physician Condition", data.physicianCondition);
+        drawField("Current Health Problem(s)", data.currentProblem);
+        drawField("How and When it began", data.problemOnset);
+        drawCombinedField("Treatment received", Array.isArray(data.treatment) ? data.treatment : [data.treatment]);
+        drawField("Other Treatment", data.treatmentOtherText);
+        drawField("Work related?", data.workRelated);
+        drawField("Progress So Far", data.progress);
 
-            const labelText = `${label}: `;
-            const labelWidth = boldFont.widthOfTextAtSize(labelText, fontSize);
+        // --- SECTION 3: PAIN & SYMPTOMS ---
+        drawSectionHeader("Section 3: Pain & Symptoms");
+        drawCombinedField("Current Pain Areas", Array.isArray(data.painArea) ? data.painArea : [data.painArea]);
+        drawField("Symptom Frequency", data.symptomFrequency);
+        drawField("Pain Level (0-10)", data.painLevel);
+        drawField("Interference with Daily Activities (0-10)", data.dailyInterference);
 
-            // Wrap the value part
-            const availableWidth = contentWidth - labelWidth;
-            const valueLines = wrapText(valStr, availableWidth, font, fontSize);
-
-            checkPageBreak(30);
-
-            // Draw label
-            summaryPage.drawText(labelText, { x: margin, y, size: fontSize, font: boldFont });
-
-            // Draw first line of value on same line as label
-            summaryPage.drawText(valueLines[0], { x: margin + labelWidth, y, size: fontSize, font });
-            y -= 15;
-
-            // Draw remaining lines indented
-            for (let i = 1; i < valueLines.length; i++) {
-                checkPageBreak(30);
-                summaryPage.drawText(valueLines[i], { x: margin + labelWidth, y, size: fontSize, font });
-                y -= 15;
-            }
-        }
+        // --- SECTION 4: MEDICAL HISTORY ---
+        drawSectionHeader("Section 4: Medical History");
+        drawField("General Health Condition", data.generalHealth);
+        drawCombinedField("Conditions", Array.isArray(data.conditions) ? data.conditions : [data.conditions]);
+        drawField("Other Condition", data.otherCondition);
+        drawField("Medications", data.medications);
+        drawField("Tobacco Use", data.tobaccoUseRef);
+        drawField("Tobacco Type", data.tobaccoType);
+        drawField("Tobacco Frequency", data.tobaccoFrequency);
+        drawField("Last Menses", data.lastMenses);
+        drawCombinedField("Family History", Array.isArray(data.familyHistory) ? data.familyHistory : [data.familyHistory]);
+        // Family History Relationships
+        drawField("Cancer Relationship", data.familyCancerRelation);
+        drawField("Heart Disease Relationship", data.familyHeartRelation);
+        drawField("Hypertension Relationship", data.familyHypertensionRelation);
+        drawField("Other History Condition", data.familyHistoryOther);
+        drawField("Other History Relationship", data.familyOtherRelation);
 
         // Certification
         checkPageBreak(180); // Increased threshold for safety
@@ -284,9 +343,9 @@ acupuncture services to contact my medical doctor if necessary.`;
         // 7. Date (Patient Acknowledgement)
         await drawContent(page2, 'date', null, 180.0, 695.0, 60.0, 22.0, undefined, 'sigPrivacyPatient');
         // 8. Sig Rep (Bottom - Acknowledgement)
-        await drawContent(page2, 'sig', 'sigPrivacyRep', 320.0, 695.0, 130.0, 22.0, undefined);
+        await drawContent(page2, 'sig', 'sigPrivacyRep', 310.0, 695.0, 120.0, 22.0, undefined);
         // 9. Date (Rep Acknowledgement)
-        await drawContent(page2, 'date', null, 450.0, 695.0, 60.0, 22.0, undefined, 'sigPrivacyRep');
+        await drawContent(page2, 'date', null, 480.0, 695.0, 60.0, 22.0, undefined, 'sigPrivacyRep');
 
         // --- PAGE 3 MAPPINGS (Arbitration) ---
         // 1. Patient Name (Top)
