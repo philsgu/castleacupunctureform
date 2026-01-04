@@ -173,7 +173,7 @@ export const submitAndNotify = action({
         }
 
         // Certification
-        checkPageBreak(150);
+        checkPageBreak(180); // Increased threshold for safety
         y -= 10;
         const certText = `I certify that the above information is complete and accurate to the best of my knowledge. If the health 
 plan information is not accurate, or if I am not eligible to receive a healthcare benefit through this 
@@ -183,9 +183,14 @@ my practitioner of acupuncture services needs to contact my primary care physici
 if my condition needs to be comanaged. Therefore, I will give authorization to my practitioner of 
 acupuncture services to contact my medical doctor if necessary.`;
 
-        summaryPage.drawText(certText, { x: margin, y, size: 9, font, lineHeight: 12 });
+        const certFontSize = 9;
+        const certLineHeight = 12;
+        const approxLines = 7; // Fixed text block takes ~7 lines
+        summaryPage.drawText(certText, { x: margin, y, size: certFontSize, font, lineHeight: certLineHeight });
 
-        y -= 50;
+        // Move y down by the height of the text block + some padding
+        y -= (approxLines * certLineHeight) + 30;
+
         summaryPage.drawText("Patient signature ______________________________________________________ Date __________", { x: margin, y, size: 10, font: boldFont });
 
         if (data.sigTermsPatientData && data.sigTermsPatientData.startsWith('data:image/')) {
