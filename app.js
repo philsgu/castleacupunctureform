@@ -245,7 +245,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     if (value.length > 0) {
                         formatted += '(' + value.substring(0, 3);
                         if (value.length > 3) {
-                            formatted += ')' + value.substring(3, 6);
+                            formatted += ') ' + value.substring(3, 6);
                             if (value.length > 6) {
                                 formatted += '-' + value.substring(6, 10);
                             }
@@ -256,9 +256,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
                     // Try to restore cursor position if it wasn't at the end
                     if (cursorPosition < oldValue.length) {
-                        // This is a simplified cursor restoration
-                        // If we added a character (punctuation), we might need to shift.
-                        // For simplicity in this vanilla implementation:
                         e.target.setSelectionRange(cursorPosition, cursorPosition);
                     }
 
@@ -270,29 +267,23 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
 
                 input.addEventListener('keydown', (e) => {
-                    // If user hits backspace and the character before cursor is punctuation,
-                    // delete the punctuation AND the digit before it to avoid the "sticky" punctuation bug.
                     if (e.key === 'Backspace') {
                         const pos = input.selectionStart;
                         const val = input.value;
                         const charBefore = val[pos - 1];
-                        if (charBefore === ')' || charBefore === '-' || charBefore === '(') {
-                            // Do nothing special here, just let it delete.
-                            // The input event will re-format.
-                            // However, if we delete ')' in (123)4, we want to delete '3' too?
-                            // Actually, let's keep it simple: if the user deletes punctuation,
-                            // the input event will see the remaining digits and re-format.
-                            // To make deletion feel natural: 
-                            // if value is "(123)", deleting ')' results in "(123".
-                            // The input event sees digits "123", formats to "(123)".
-                            // THAT is the lock. 
-                            // Fix: If it's a backspace, we should probably delete the digit behind the punctuation too.
 
-                            // Let's try this: if backspace and char is punctuation, prevent default and delete 2 chars.
+                        // If backspacing a punctuation character, delete 2 characters (punctuation + digit)
+                        if (charBefore === ')' || charBefore === '-' || charBefore === '(') {
                             e.preventDefault();
                             input.value = val.substring(0, pos - 2) + val.substring(pos);
                             input.setSelectionRange(pos - 2, pos - 2);
-                            // Trigger input event manually
+                            input.dispatchEvent(new Event('input'));
+                        }
+                        // If backspacing after the space in "(xxx) x", delete 3 characters (space + ) + digit)
+                        else if (charBefore === ' ' && val[pos - 2] === ')') {
+                            e.preventDefault();
+                            input.value = val.substring(0, pos - 3) + val.substring(pos);
+                            input.setSelectionRange(pos - 3, pos - 3);
                             input.dispatchEvent(new Event('input'));
                         }
                     }
