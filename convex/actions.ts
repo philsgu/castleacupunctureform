@@ -26,18 +26,91 @@ export const submitAndNotify = action({
 
         const data = args.formData;
 
+        // --- FIELD LABELS MAPPING ---
+        const FIELD_LABELS: Record<string, string> = {
+            firstName: "First Name",
+            lastName: "Last Name",
+            dob: "Birthdate",
+            sex: "Sex",
+            address: "Address",
+            city: "City",
+            state: "State",
+            zip: "Zip",
+            email: "Email",
+            cellPhone: "Cell Phone",
+            otherPhone: "Other Phone",
+            language: "Primary Language",
+            employer: "Employer",
+            occupation: "Occupation",
+            underCare: "Under care of physician?",
+            physicianCondition: "Physician Condition",
+            currentProblem: "Current health problem(s)",
+            problemOnset: "How and When it began",
+            treatment: "Treatment received",
+            workRelated: "Work related?",
+            progress: "Progress So Far",
+            painArea: "Current Pain Areas",
+            painLevel: "Pain Level (0-10)",
+            painInterference: "Interference with Daily Activities (0-10)",
+            symptomFrequency: "Symptom Frequency",
+            healthCondition: "General Health Condition",
+            tobaccoUseRef: "Tobacco Use",
+            tobaccoType: "Tobacco Type",
+            tobaccoFrequency: "Tobacco Frequency",
+            history: "Conditions",
+            otherConditionText: "Other Condition",
+            medications: "Medications",
+            familyHistory: "Family History",
+            familyHistoryRel_Cancer: "Cancer Relationship",
+            familyHistoryRel_Heart: "Heart Disease Relationship",
+            familyHistoryRel_Hypertension: "Hypertension Relationship",
+            familyHistoryRel_Lupus: "Lupus Relationship",
+            familyHistoryRel_Other: "Other History Relationship",
+            familyHistoryOtherSpec: "Other History Condition",
+            lastMenses: "Last Menses Date",
+            isPatientSigner: "Is Patient the Signer?",
+            privacyName: "Privacy Acknowledgement Name",
+            retroactiveCoverage: "Retroactive Arbitration Coverage",
+            arbitrationInitial: "Arbitration Initial",
+            arbPatientName: "Arb Patient Name",
+            arbGuardianName: "Arb Guardian Name",
+            consentPatientName: "Consent Patient Name",
+            consentRelationship: "Consent Relationship"
+        };
+
+        // --- UTILITY: Wrap Text ---
+        const wrapText = (text: string, maxWidth: number, font: any, fontSize: number) => {
+            const words = text.split(' ');
+            const lines = [];
+            let currentLine = '';
+
+            for (const word of words) {
+                const testLine = currentLine ? `${currentLine} ${word}` : word;
+                const width = font.widthOfTextAtSize(testLine, fontSize);
+                if (width > maxWidth) {
+                    lines.push(currentLine);
+                    currentLine = word;
+                } else {
+                    currentLine = testLine;
+                }
+            }
+            if (currentLine) lines.push(currentLine);
+            return lines;
+        };
+
         // 2. Create New PDF
         const newPdf = await PDFDocument.create();
         const templatePdf = await PDFDocument.load(PDF_TEMPLATE);
 
         // --- PAGE 1: SUMMARY ---
-        const summaryPage = newPdf.addPage();
-        const { width, height } = summaryPage.getSize(); // 612 x 792 for Letter
+        let summaryPage = newPdf.addPage();
+        const { width, height } = summaryPage.getSize();
         const font = await newPdf.embedFont(StandardFonts.Helvetica);
         const boldFont = await newPdf.embedFont(StandardFonts.HelveticaBold);
 
         let y = height - 50;
         const margin = 50;
+        const contentWidth = width - 2 * margin;
 
         summaryPage.drawText(`Patient Intake Summary`, { x: margin, y, size: 18, font: boldFont });
         y -= 30;
@@ -48,18 +121,57 @@ export const submitAndNotify = action({
         summaryPage.drawText("Form Data:", { x: margin, y, size: 12, font: boldFont });
         y -= 15;
 
-        for (const [key, value] of Object.entries(data)) {
-            if (key.startsWith('sig') || key === 'formData') continue;
-            if (y < 250) break; // Leave room for footer
+        // Helper to check for page break
+        const checkPageBreak = (needed: number) => {
+            if (y < needed) {
+                summaryPage = newPdf.addPage();
+                y = height - 50;
+                return true;
+            }
+            return false;
+        };
 
-            const label = key.charAt(0).toUpperCase() + key.slice(1);
-            const text = `${label}: ${value}`;
-            summaryPage.drawText(text.substring(0, 90), { x: margin, y, size: fontSize, font });
+        for (const [key, value] of Object.entries(data)) {
+            // Skip signatures and internal metadata
+            if (key.startsWith('sig') || key === 'formData' || key.includes('Date')) continue;
+
+            const label = FIELD_LABELS[key] || key.charAt(0).toUpperCase() + key.slice(1);
+            let valStr = "";
+            if (Array.isArray(value)) {
+                valStr = value.join(', ');
+            } else {
+                valStr = String(value);
+            }
+
+            if (!valStr || valStr === 'undefined' || valStr === 'null') continue;
+
+            const labelText = `${label}: `;
+            const labelWidth = boldFont.widthOfTextAtSize(labelText, fontSize);
+
+            // Wrap the value part
+            const availableWidth = contentWidth - labelWidth;
+            const valueLines = wrapText(valStr, availableWidth, font, fontSize);
+
+            checkPageBreak(30);
+
+            // Draw label
+            summaryPage.drawText(labelText, { x: margin, y, size: fontSize, font: boldFont });
+
+            // Draw first line of value on same line as label
+            summaryPage.drawText(valueLines[0], { x: margin + labelWidth, y, size: fontSize, font });
             y -= 15;
+
+            // Draw remaining lines indented
+            for (let i = 1; i < valueLines.length; i++) {
+                checkPageBreak(30);
+                summaryPage.drawText(valueLines[i], { x: margin + labelWidth, y, size: fontSize, font });
+                y -= 15;
+            }
         }
 
         // Certification
-        y = 240;
+        checkPageBreak(150);
+        y -= 10;
         const certText = `I certify that the above information is complete and accurate to the best of my knowledge. If the health 
 plan information is not accurate, or if I am not eligible to receive a healthcare benefit through this 
 practitioner, I understand that I am liable for all charges for services. I agreed to notify this practitioner 
@@ -70,7 +182,7 @@ acupuncture services to contact my medical doctor if necessary.`;
 
         summaryPage.drawText(certText, { x: margin, y, size: 9, font, lineHeight: 12 });
 
-        y = 100;
+        y -= 50;
         summaryPage.drawText("Patient signature ______________________________________________________ Date __________", { x: margin, y, size: 10, font: boldFont });
 
         if (data.sigTermsPatientData && data.sigTermsPatientData.startsWith('data:image/')) {
@@ -153,17 +265,17 @@ acupuncture services to contact my medical doctor if necessary.`;
         // 3. Sig Rep (Top)
         await drawContent(page2, 'sig', 'sigTermsRep', 322.99, 559.42, 104.69, 22.26);
         // 4. Date
-        await drawContent(page2, 'date', null, 442.92, 559.22, 49.64, 23.26, null, 'sigTermsRep');
+        await drawContent(page2, 'date', null, 442.92, 559.22, 49.64, 23.26, undefined, 'sigTermsRep');
         // 5. Patient Name (Bottom)
         await drawContent(page2, 'text', 'patientName', 79.34, 627.9, 176.68, 17.97);
         // 6. Sig Patient (Bottom)
-        await drawContent(page2, 'sig', 'sigPrivacyPatient', 88.49, 660.82, 95.79, 24.87);
+        await drawContent(page2, 'sig', 'sigPrivacyPatient', 101.9, 115.1, 192.49, 44.57, undefined);
         // 7. Date
-        await drawContent(page2, 'date', null, 201.74, 660.56, 51.03, 24.87, null, 'sigPrivacyPatient');
+        await drawContent(page2, 'date', null, 381.1, 115.1, 126.79, 44.57, undefined, 'sigPrivacyPatient');
         // 8. Sig Rep (Bottom)
-        await drawContent(page2, 'sig', 'sigPrivacyRep', 321.12, 663.71, 112.79, 21.91);
+        await drawContent(page2, 'sig', 'sigPrivacyRep', 101.9, 175.52, 192.49, 44.57, undefined);
         // 9. Date
-        await drawContent(page2, 'date', null, 444.21, 663.28, 44.13, 21.49, null, 'sigPrivacyRep');
+        await drawContent(page2, 'date', null, 381.1, 175.52, 126.79, 44.57, undefined, 'sigPrivacyRep');
 
         // --- PAGE 3 MAPPINGS (Arbitration) ---
         // 1. Patient Name (Top)
@@ -178,21 +290,21 @@ acupuncture services to contact my medical doctor if necessary.`;
         await drawContent(page3, 'text', 'patientName', 120.38, 662.06, 125.21, 18.68);
 
         // 4. Sig Patient
-        await drawContent(page3, 'sig', 'sigArbPatient', 301.04, 661.99, 153.85, 18.68);
+        await drawContent(page3, 'sig', 'sigArbPatient', 304.83, 649.37, 151.7, 18.06, undefined);
         // 5. Date
-        await drawContent(page3, 'date', null, 492.18, 659.97, 73.36, 21.49, null, 'sigArbPatient');
+        await drawContent(page3, 'date', null, 492.18, 659.97, 73.36, 21.49, undefined, 'sigArbPatient');
         // 6. Parent/Guardian Name
         await drawContent(page3, 'text', null, 145.09, 683.79, 100.52, 23.15, data.arbGuardianName || "");
         // 7. Sig Guardian
         await drawContent(page3, 'sig', 'sigArbGuardian', 297.42, 685.38, 160.88, 21.81);
         // 8. Date
-        await drawContent(page3, 'date', null, 494.03, 682.13, 79.08, 21.81, null, 'sigArbGuardian');
+        await drawContent(page3, 'date', null, 494.03, 682.13, 79.08, 21.81, undefined, 'sigArbGuardian');
         // 9. Office Name
         await drawContent(page3, 'text', null, 93.47, 709.05, 153.75, 17.31, "Castle Acupuncture");
         // 10. Signature of Georgina (Office)
         await drawContent(page3, 'sig', 'sigArbOffice', 304.73, 710.89, 152.9, 16.63);
         // 11. Date
-        await drawContent(page3, 'date', null, 493.93, 704.99, 77.19, 18.33, null, 'sigArbOffice');
+        await drawContent(page3, 'date', null, 493.93, 704.99, 77.19, 18.33, undefined, 'sigArbOffice');
 
         // --- PAGE 4 MAPPINGS (Consent) ---
         // 1. Patient Name (Top)
@@ -202,7 +314,7 @@ acupuncture services to contact my medical doctor if necessary.`;
         // 3. Patient Sig
         await drawContent(page4, 'sig', 'sigConsentPatient', 171.81, 688.98, 158.56, 23.31);
         // 4. Date
-        await drawContent(page4, 'date', null, 372.03, 685.88, 112.65, 23.31, null, 'sigConsentPatient');
+        await drawContent(page4, 'date', null, 372.03, 685.88, 112.65, 23.31, undefined, 'sigConsentPatient');
 
 
         const pdfBytes = await newPdf.save();
@@ -221,7 +333,7 @@ acupuncture services to contact my medical doctor if necessary.`;
         const { error } = await resend.emails.send({
             from: 'Castle Acupuncture <no-reply@castleacupuncture.com>',
             to: [toEmail],
-            reply_to: 'philsgu@icloud.com',
+            replyTo: 'philsgu@icloud.com',
             cc: ['philsgu@icloud.com'],
             subject: `New Patient Intake: ${args.lastName}, ${args.firstName}`,
             html: `
