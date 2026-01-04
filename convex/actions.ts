@@ -81,7 +81,9 @@ export const submitAndNotify = action({
 
         // --- UTILITY: Wrap Text ---
         const wrapText = (text: string, maxWidth: number, font: any, fontSize: number) => {
-            const words = text.split(' ');
+            // CRITICAL: Replace newlines/tabs with spaces to avoid PDF-Lib encoding errors
+            const sanitized = text.replace(/[\n\r\t]+/g, ' ').trim();
+            const words = sanitized.split(' ');
             const lines = [];
             let currentLine = '';
 
