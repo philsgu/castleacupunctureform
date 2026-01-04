@@ -339,13 +339,13 @@ acupuncture services to contact my medical doctor if necessary.`;
         // 5. Patient Name (Bottom - Acknowledgement)
         await drawContent(page2, 'text', 'patientName', 79.34, 627.9, 176.68, 17.97);
         // 6. Sig Patient (Bottom - Acknowledgement)
-        await drawContent(page2, 'sig', 'sigPrivacyPatient', 55.0, 715.0, 130.0, 20.0, undefined);
+        await drawContent(page2, 'sig', 'sigPrivacyPatient', 55.0, 666.77, 130.0, 20.0, undefined);
         // 7. Date (Patient Acknowledgement)
-        await drawContent(page2, 'date', null, 180.0, 715.0, 60.0, 20.0, undefined, 'sigPrivacyPatient');
+        await drawContent(page2, 'date', null, 180.0, 666.77, 60.0, 20.0, undefined, 'sigPrivacyPatient');
         // 8. Sig Rep (Bottom - Acknowledgement)
-        await drawContent(page2, 'sig', 'sigPrivacyRep', 310.0, 715.0, 120.0, 20.0, undefined);
+        await drawContent(page2, 'sig', 'sigPrivacyRep', 310.0, 666.77, 120.0, 20.0, undefined);
         // 9. Date (Rep Acknowledgement)
-        await drawContent(page2, 'date', null, 480.0, 715.0, 60.0, 20.0, undefined, 'sigPrivacyRep');
+        await drawContent(page2, 'date', null, 480.0, 666.77, 60.0, 20.0, undefined, 'sigPrivacyRep');
 
         // --- PAGE 3 MAPPINGS (Arbitration) ---
         // 1. Patient Name (Top)
@@ -360,15 +360,15 @@ acupuncture services to contact my medical doctor if necessary.`;
         await drawContent(page3, 'text', 'patientName', 120.38, 662.06, 125.21, 18.68);
 
         // 4. Sig Patient
-        await drawContent(page3, 'sig', 'sigArbPatient', 304.83, 649.37, 151.7, 18.06, undefined);
+        await drawContent(page3, 'sig', 'sigArbPatient', 304.83, 662.5, 151.7, 18.06, undefined);
         // 5. Date
-        await drawContent(page3, 'date', null, 492.18, 659.97, 73.36, 21.49, undefined, 'sigArbPatient');
+        await drawContent(page3, 'date', null, 492.18, 662.5, 73.36, 21.49, undefined, 'sigArbPatient');
         // 6. Parent/Guardian Name
-        await drawContent(page3, 'text', null, 145.09, 683.79, 100.52, 23.15, data.arbGuardianName || "");
+        await drawContent(page3, 'text', null, 145.09, 684.0, 100.52, 23.15, data.arbGuardianName || "");
         // 7. Sig Guardian
-        await drawContent(page3, 'sig', 'sigArbGuardian', 297.42, 685.38, 160.88, 21.81);
+        await drawContent(page3, 'sig', 'sigArbGuardian', 297.42, 684.0, 160.88, 21.81);
         // 8. Date
-        await drawContent(page3, 'date', null, 494.03, 682.13, 79.08, 21.81, undefined, 'sigArbGuardian');
+        await drawContent(page3, 'date', null, 494.03, 684.0, 79.08, 21.81, undefined, 'sigArbGuardian');
         // 9. Office Name
         await drawContent(page3, 'text', null, 93.47, 709.05, 153.75, 17.31, "Castle Acupuncture");
         // 10. Signature of Georgina (Office)
