@@ -29,6 +29,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupNameAutofill(); // New Auto-fill
     setupDefaultSignatures(); // New Default Sig
     setupSignerToggle(); // New Signer Toggle for Sections 5-7
+    setupPhoneFormatting(); // New Phone Formatting
 
     function setupConditionalFields() {
         // Tobacco Toggle (Radio)
@@ -199,6 +200,38 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         }
+    }
+
+    function setupPhoneFormatting() {
+        const phoneInputs = ['cellPhone', 'otherPhone'];
+
+        phoneInputs.forEach(id => {
+            const input = document.getElementById(id);
+            if (input) {
+                input.addEventListener('input', (e) => {
+                    let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+                    if (value.length > 10) value = value.slice(0, 10); // Limit to 10 digits
+
+                    let formatted = '';
+                    if (value.length > 0) {
+                        formatted += '(' + value.substring(0, 3);
+                        if (value.length >= 3) {
+                            formatted += ')';
+                            if (value.length > 3) {
+                                formatted += value.substring(3, 6);
+                                if (value.length >= 6) {
+                                    formatted += '-';
+                                    if (value.length > 6) {
+                                        formatted += value.substring(6, 10);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    e.target.value = formatted;
+                });
+            }
+        });
     }
 
     function setupNameAutofill() {

@@ -9,6 +9,7 @@
  */
 
 import type * as actions from "../actions.js";
+import type * as assets from "../assets.js";
 import type * as patients from "../patients.js";
 import type * as template from "../template.js";
 
@@ -20,6 +21,7 @@ import type {
 
 declare const fullApi: ApiFromModules<{
   actions: typeof actions;
+  assets: typeof assets;
   patients: typeof patients;
   template: typeof template;
 }>;
