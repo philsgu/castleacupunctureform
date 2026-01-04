@@ -222,7 +222,7 @@ export const submitAndNotify = action({
         drawField("Tobacco Use", data.tobaccoUseRef);
         drawField("Tobacco Type", data.tobaccoType);
         drawField("Tobacco Frequency", data.tobaccoFrequency);
-        drawField("Last Menses Date (optional)", data.lastMenses);
+        drawField("Last Menses Date (if applicable)", data.lastMenses);
         drawCombinedField("Family History", Array.isArray(data.familyHistory) ? data.familyHistory : [data.familyHistory]);
         // Family History Relationships
         drawField("Cancer Relationship", data.familyCancerRelation);
@@ -337,7 +337,7 @@ acupuncture services to contact my medical doctor if necessary.`;
         // 4. Date
         await drawContent(page2, 'date', null, 442.92, 559.22, 49.64, 23.26, undefined, 'sigTermsRep');
         // 5. Patient Name (Bottom - Acknowledgement)
-        await drawContent(page2, 'text', 'patientName', 79.34, 627.9, 176.68, 17.97);
+        await drawContent(page2, 'text', 'privacyName', 79.34, 627.9, 176.68, 17.97);
         // 6. Sig Patient (Bottom - Acknowledgement)
         await drawContent(page2, 'sig', 'sigPrivacyPatient', 55.0, 666.77, 130.0, 20.0, undefined);
         // 7. Date (Patient Acknowledgement)
@@ -349,12 +349,9 @@ acupuncture services to contact my medical doctor if necessary.`;
 
         // --- PAGE 3 MAPPINGS (Arbitration) ---
         // 1. Patient Name (Top)
-        await drawContent(page3, 'text', 'patientName', 118.36, 31.1, 404.51, 21.81);
+        await drawContent(page3, 'text', 'arbPatientName', 118.36, 31.1, 404.51, 21.81);
         // 2. Initial (Retroactive)
         await drawContent(page3, 'text', 'arbitrationInitial', 183.22, 541.72, 28.5, 13.78);
-        // 3. Patient Name (Signature area) - Keep this? The user didn't say delete. 
-        // But usually these requests are complete for that field. 
-        // Actually, let's update the one at 120.38 to the new one and see.
         // Wait, 31.1 top is definitely the top of the page. 
         // Let's keep the existing signature area name too just in case.
         await drawContent(page3, 'text', 'patientName', 120.38, 662.06, 125.21, 18.68);
