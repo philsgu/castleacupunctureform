@@ -339,13 +339,13 @@ acupuncture services to contact my medical doctor if necessary.`;
         // 5. Patient Name (Bottom - Acknowledgement)
         await drawContent(page2, 'text', 'patientName', 79.34, 627.9, 176.68, 17.97);
         // 6. Sig Patient (Bottom - Acknowledgement)
-        await drawContent(page2, 'sig', 'sigPrivacyPatient', 55.0, 695.0, 130.0, 22.0, undefined);
+        await drawContent(page2, 'sig', 'sigPrivacyPatient', 55.0, 715.0, 130.0, 20.0, undefined);
         // 7. Date (Patient Acknowledgement)
-        await drawContent(page2, 'date', null, 180.0, 695.0, 60.0, 22.0, undefined, 'sigPrivacyPatient');
+        await drawContent(page2, 'date', null, 180.0, 715.0, 60.0, 20.0, undefined, 'sigPrivacyPatient');
         // 8. Sig Rep (Bottom - Acknowledgement)
-        await drawContent(page2, 'sig', 'sigPrivacyRep', 310.0, 723.0, 120.0, 20.0, undefined);
+        await drawContent(page2, 'sig', 'sigPrivacyRep', 310.0, 715.0, 120.0, 20.0, undefined);
         // 9. Date (Rep Acknowledgement)
-        await drawContent(page2, 'date', null, 480.0, 723.0, 60.0, 20.0, undefined, 'sigPrivacyRep');
+        await drawContent(page2, 'date', null, 480.0, 715.0, 60.0, 20.0, undefined, 'sigPrivacyRep');
 
         // --- PAGE 3 MAPPINGS (Arbitration) ---
         // 1. Patient Name (Top)
@@ -411,7 +411,7 @@ acupuncture services to contact my medical doctor if necessary.`;
         <p>Attached is a copy of the intake form you recently submitted. If any of this information changes or requires a correction, please contact me at <a href="mailto:georginatcm@gmail.com">georginatcm@gmail.com</a>.</p>
         <p>I look forward to seeing you soon and supporting your health and wellness.</p>
         <p>Sincerely,</p>
-        <p><strong>Georgina Castle, DACM, MPH</strong></p>
+        <p>Georgina Castle, DACM, MPH</p>
       `,
             attachments: [
                 {
