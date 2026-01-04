@@ -218,26 +218,41 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 input.addEventListener('input', (e) => {
+                    // Get current cursor position
+                    const cursorPosition = e.target.selectionStart;
+                    const oldValue = e.target.value;
+
                     let value = e.target.value.replace(/\D/g, ''); // Remove non-digits
                     if (value.length > 10) value = value.slice(0, 10); // Limit to 10 digits
+
+                    // If empty, clear everything
+                    if (value.length === 0) {
+                        e.target.value = '';
+                        input.classList.remove('input-error');
+                        input.style.borderColor = '#e2e8f0';
+                        return;
+                    }
 
                     let formatted = '';
                     if (value.length > 0) {
                         formatted += '(' + value.substring(0, 3);
-                        if (value.length >= 3) {
-                            formatted += ')';
-                            if (value.length > 3) {
-                                formatted += value.substring(3, 6);
-                                if (value.length >= 6) {
-                                    formatted += '-';
-                                    if (value.length > 6) {
-                                        formatted += value.substring(6, 10);
-                                    }
-                                }
+                        if (value.length > 3) {
+                            formatted += ')' + value.substring(3, 6);
+                            if (value.length > 6) {
+                                formatted += '-' + value.substring(6, 10);
                             }
                         }
                     }
+
                     e.target.value = formatted;
+
+                    // Try to restore cursor position if it wasn't at the end
+                    if (cursorPosition < oldValue.length) {
+                        // This is a simplified cursor restoration
+                        // If we added a character (punctuation), we might need to shift.
+                        // For simplicity in this vanilla implementation:
+                        e.target.setSelectionRange(cursorPosition, cursorPosition);
+                    }
 
                     // Real-time clear error if it reaches 10
                     if (value.length === 10) {
@@ -246,9 +261,41 @@ document.addEventListener('DOMContentLoaded', () => {
                     }
                 });
 
+                input.addEventListener('keydown', (e) => {
+                    // If user hits backspace and the character before cursor is punctuation,
+                    // delete the punctuation AND the digit before it to avoid the "sticky" punctuation bug.
+                    if (e.key === 'Backspace') {
+                        const pos = input.selectionStart;
+                        const val = input.value;
+                        const charBefore = val[pos - 1];
+                        if (charBefore === ')' || charBefore === '-' || charBefore === '(') {
+                            // Do nothing special here, just let it delete.
+                            // The input event will re-format.
+                            // However, if we delete ')' in (123)4, we want to delete '3' too?
+                            // Actually, let's keep it simple: if the user deletes punctuation,
+                            // the input event will see the remaining digits and re-format.
+                            // To make deletion feel natural: 
+                            // if value is "(123)", deleting ')' results in "(123".
+                            // The input event sees digits "123", formats to "(123)".
+                            // THAT is the lock. 
+                            // Fix: If it's a backspace, we should probably delete the digit behind the punctuation too.
+
+                            // Let's try this: if backspace and char is punctuation, prevent default and delete 2 chars.
+                            e.preventDefault();
+                            input.value = val.substring(0, pos - 2) + val.substring(pos);
+                            input.setSelectionRange(pos - 2, pos - 2);
+                            // Trigger input event manually
+                            input.dispatchEvent(new Event('input'));
+                        }
+                    }
+                });
+
                 input.addEventListener('blur', () => {
                     const value = input.value.replace(/\D/g, '');
-                    if (value.length > 0 && value.length < 10) {
+                    if (value.length === 0) {
+                        input.classList.remove('input-error');
+                        input.style.borderColor = '#e2e8f0';
+                    } else if (value.length < 10) {
                         input.classList.add('input-error');
                         input.style.borderColor = '#ef4444';
                     }
