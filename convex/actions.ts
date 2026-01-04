@@ -277,16 +277,16 @@ acupuncture services to contact my medical doctor if necessary.`;
         await drawContent(page2, 'sig', 'sigTermsRep', 322.99, 559.42, 104.69, 22.26);
         // 4. Date
         await drawContent(page2, 'date', null, 442.92, 559.22, 49.64, 23.26, undefined, 'sigTermsRep');
-        // 5. Patient Name (Bottom)
+        // 5. Patient Name (Bottom - Acknowledgement)
         await drawContent(page2, 'text', 'patientName', 79.34, 627.9, 176.68, 17.97);
-        // 6. Sig Patient (Bottom)
-        await drawContent(page2, 'sig', 'sigPrivacyPatient', 101.9, 115.1, 192.49, 44.57, undefined);
-        // 7. Date
-        await drawContent(page2, 'date', null, 381.1, 115.1, 126.79, 44.57, undefined, 'sigPrivacyPatient');
-        // 8. Sig Rep (Bottom)
-        await drawContent(page2, 'sig', 'sigPrivacyRep', 101.9, 175.52, 192.49, 44.57, undefined);
-        // 9. Date
-        await drawContent(page2, 'date', null, 381.1, 175.52, 126.79, 44.57, undefined, 'sigPrivacyRep');
+        // 6. Sig Patient (Bottom - Acknowledgement)
+        await drawContent(page2, 'sig', 'sigPrivacyPatient', 55.0, 695.0, 130.0, 22.0, undefined);
+        // 7. Date (Patient Acknowledgement)
+        await drawContent(page2, 'date', null, 180.0, 695.0, 60.0, 22.0, undefined, 'sigPrivacyPatient');
+        // 8. Sig Rep (Bottom - Acknowledgement)
+        await drawContent(page2, 'sig', 'sigPrivacyRep', 320.0, 695.0, 130.0, 22.0, undefined);
+        // 9. Date (Rep Acknowledgement)
+        await drawContent(page2, 'date', null, 450.0, 695.0, 60.0, 22.0, undefined, 'sigPrivacyRep');
 
         // --- PAGE 3 MAPPINGS (Arbitration) ---
         // 1. Patient Name (Top)
