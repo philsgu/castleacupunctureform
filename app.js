@@ -38,6 +38,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupDefaultSignatures(); // New Default Sig
     setupSignerToggle(); // New Signer Toggle for Sections 5-7
     setupPhoneFormatting(); // New Phone Formatting
+    setupInitialsValidation(); // New Initials Validation
 
     function setupConditionalFields() {
         // Tobacco Toggle (Radio)
@@ -309,6 +310,16 @@ document.addEventListener('DOMContentLoaded', () => {
                 });
             }
         });
+    }
+
+    function setupInitialsValidation() {
+        const initialsInput = document.querySelector('input[name="arbitrationInitial"]');
+        if (initialsInput) {
+            initialsInput.addEventListener('input', (e) => {
+                // Remove any non-alpha characters and convert to uppercase
+                e.target.value = e.target.value.replace(/[^a-zA-Z]/g, '').toUpperCase();
+            });
+        }
     }
 
     function setupNameAutofill() {
