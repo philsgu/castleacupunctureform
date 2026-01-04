@@ -222,7 +222,7 @@ export const submitAndNotify = action({
         drawField("Tobacco Use", data.tobaccoUseRef);
         drawField("Tobacco Type", data.tobaccoType);
         drawField("Tobacco Frequency", data.tobaccoFrequency);
-        drawField("Last Menses", data.lastMenses);
+        drawField("Last Menses Date (optional)", data.lastMenses);
         drawCombinedField("Family History", Array.isArray(data.familyHistory) ? data.familyHistory : [data.familyHistory]);
         // Family History Relationships
         drawField("Cancer Relationship", data.familyCancerRelation);
@@ -343,9 +343,9 @@ acupuncture services to contact my medical doctor if necessary.`;
         // 7. Date (Patient Acknowledgement)
         await drawContent(page2, 'date', null, 180.0, 695.0, 60.0, 22.0, undefined, 'sigPrivacyPatient');
         // 8. Sig Rep (Bottom - Acknowledgement)
-        await drawContent(page2, 'sig', 'sigPrivacyRep', 310.0, 695.0, 120.0, 22.0, undefined);
+        await drawContent(page2, 'sig', 'sigPrivacyRep', 310.0, 723.0, 120.0, 20.0, undefined);
         // 9. Date (Rep Acknowledgement)
-        await drawContent(page2, 'date', null, 480.0, 695.0, 60.0, 22.0, undefined, 'sigPrivacyRep');
+        await drawContent(page2, 'date', null, 480.0, 723.0, 60.0, 20.0, undefined, 'sigPrivacyRep');
 
         // --- PAGE 3 MAPPINGS (Arbitration) ---
         // 1. Patient Name (Top)
@@ -405,13 +405,13 @@ acupuncture services to contact my medical doctor if necessary.`;
             to: [toEmail],
             replyTo: 'philsgu@icloud.com',
             cc: ['philsgu@icloud.com'],
-            subject: `New Patient Intake: ${args.lastName}, ${args.firstName}`,
+            subject: `Confirmation: New Patient Paperwork`,
             html: `
-        <h1>New Patient Intake Form Submitted</h1>
-        <p><strong>Name:</strong> ${args.firstName} ${args.lastName}</p>
-        <p><strong>DOB:</strong> ${args.dob}</p>
-        <p><strong>Patient Email:</strong> ${patientEmail || "N/A"}</p>
-        <p>A PDF copy of the intake packet is attached.</p>
+        <p>Hello! Thank you for choosing Castle Acupuncture.</p>
+        <p>Attached is a copy of the intake form you recently submitted. If any of this information changes or requires a correction, please contact me at <a href="mailto:georginatcm@gmail.com">georginatcm@gmail.com</a>.</p>
+        <p>I look forward to seeing you soon and supporting your health and wellness.</p>
+        <p>Sincerely,</p>
+        <p><strong>Georgina Castle, DACM, MPH</strong></p>
       `,
             attachments: [
                 {
