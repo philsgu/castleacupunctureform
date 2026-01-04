@@ -256,7 +256,10 @@ acupuncture services to contact my medical doctor if necessary.`;
                 let finalStr = txt;
                 if (key === 'patientName') finalStr = `${args.firstName} ${args.lastName}`;
 
-                page.drawText(finalStr, { x: left, y: y + (h / 4), size: 10, font });
+                // CRITICAL: Replace newlines/tabs with spaces to avoid PDF-Lib encoding errors
+                const sanitizedStr = String(finalStr).replace(/[\n\r\t]+/g, ' ').trim();
+
+                page.drawText(sanitizedStr, { x: left, y: y + (h / 4), size: 10, font });
             }
         };
 
