@@ -17,8 +17,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // Set max date for DOB to today
     const dobInput = document.getElementById('dob');
     if (dobInput) {
-        const today = new Date().toISOString().split('T')[0];
-        dobInput.max = today;
+        // Use PST (America/Los_Angeles) to determine "today" to avoid allowing "tomorrow" 
+        // if the browser relies on UTC while it's still evening in PST.
+        const todayPST = new Intl.DateTimeFormat('en-CA', {
+            timeZone: 'America/Los_Angeles',
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+        }).format(new Date());
+
+        dobInput.max = todayPST;
     }
 
     // Initialize
