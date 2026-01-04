@@ -211,13 +211,13 @@ export const submitAndNotify = action({
         drawCombinedField("Current Pain Areas", Array.isArray(data.painArea) ? data.painArea : [data.painArea]);
         drawField("Symptom Frequency", data.symptomFrequency);
         drawField("Pain Level (0-10)", data.painLevel);
-        drawField("Interference with Daily Activities (0-10)", data.dailyInterference);
+        drawField("Interference with Daily Activities (0-10)", data.painInterference);
 
         // --- SECTION 4: MEDICAL HISTORY ---
         drawSectionHeader("Section 4: Medical History");
-        drawField("General Health Condition", data.generalHealth);
-        drawCombinedField("Conditions", Array.isArray(data.conditions) ? data.conditions : [data.conditions]);
-        drawField("Other Condition", data.otherCondition);
+        drawField("General Health Condition", data.healthCondition);
+        drawCombinedField("Conditions", Array.isArray(data.history) ? data.history : [data.history]);
+        drawField("Other Condition", data.otherConditionText);
         drawField("Medications", data.medications);
         drawField("Tobacco Use", data.tobaccoUseRef);
         drawField("Tobacco Type", data.tobaccoType);
@@ -225,11 +225,23 @@ export const submitAndNotify = action({
         drawField("Last Menses Date (if applicable)", data.lastMenses);
         drawCombinedField("Family History", Array.isArray(data.familyHistory) ? data.familyHistory : [data.familyHistory]);
         // Family History Relationships
-        drawField("Cancer Relationship", data.familyCancerRelation);
-        drawField("Heart Disease Relationship", data.familyHeartRelation);
-        drawField("Hypertension Relationship", data.familyHypertensionRelation);
-        drawField("Other History Condition", data.familyHistoryOther);
-        drawField("Other History Relationship", data.familyOtherRelation);
+        drawField("Cancer Relationship", data.familyHistoryRel_Cancer);
+        drawField("Heart Disease Relationship", data.familyHistoryRel_Heart);
+        drawField("Hypertension Relationship", data.familyHistoryRel_Hypertension);
+        drawField("Lupus Relationship", data.familyHistoryRel_Lupus);
+        drawField("Other Family History Spec", data.familyHistoryOtherSpec);
+        drawField("Other Family Relationship", data.familyHistoryRel_Other);
+
+        // --- SECTION 5: SIGNER INFORMATION ---
+        drawSectionHeader("Section 5: Signer Information");
+        drawField("Is Signer the Patient?", data.isPatientSigner);
+        if (data.isPatientSigner === 'No') {
+            drawField("Representative Name", data.arbGuardianName);
+            drawField("Relationship to Patient", data.consentRelationship);
+        }
+        if (data.retroactiveCoverage === 'Yes') {
+            drawField("Arbitration Retroactive Effect Initial", data.arbitrationInitial);
+        }
 
         // Certification
         checkPageBreak(180); // Increased threshold for safety
