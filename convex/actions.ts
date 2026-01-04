@@ -166,23 +166,32 @@ acupuncture services to contact my medical doctor if necessary.`;
         await drawContent(page2, 'date', null, 444.21, 663.28, 44.13, 21.49, null, 'sigPrivacyRep');
 
         // --- PAGE 3 MAPPINGS (Arbitration) ---
-        // 1. Patient Name
+        // 1. Patient Name (Top)
+        await drawContent(page3, 'text', 'patientName', 118.36, 31.1, 404.51, 21.81);
+        // 2. Initial (Retroactive)
+        await drawContent(page3, 'text', 'arbitrationInitial', 183.22, 541.72, 28.5, 13.78);
+        // 3. Patient Name (Signature area) - Keep this? The user didn't say delete. 
+        // But usually these requests are complete for that field. 
+        // Actually, let's update the one at 120.38 to the new one and see.
+        // Wait, 31.1 top is definitely the top of the page. 
+        // Let's keep the existing signature area name too just in case.
         await drawContent(page3, 'text', 'patientName', 120.38, 662.06, 125.21, 18.68);
-        // 2. Sig Patient
+
+        // 4. Sig Patient
         await drawContent(page3, 'sig', 'sigArbPatient', 301.04, 661.99, 153.85, 18.68);
-        // 3. Date
+        // 5. Date
         await drawContent(page3, 'date', null, 492.18, 659.97, 73.36, 21.49, null, 'sigArbPatient');
-        // 4. Parent/Guardian Name
+        // 6. Parent/Guardian Name
         await drawContent(page3, 'text', null, 145.09, 683.79, 100.52, 23.15, data.arbGuardianName || "");
-        // 5. Sig Guardian
+        // 7. Sig Guardian
         await drawContent(page3, 'sig', 'sigArbGuardian', 297.42, 685.38, 160.88, 21.81);
-        // 6. Date
+        // 8. Date
         await drawContent(page3, 'date', null, 494.03, 682.13, 79.08, 21.81, null, 'sigArbGuardian');
-        // 7. Office Name
+        // 9. Office Name
         await drawContent(page3, 'text', null, 93.47, 709.05, 153.75, 17.31, "Castle Acupuncture");
-        // 8. Signature of Georgina (Office)
-        await drawContent(page3, 'sig', 'sigArbOffice', 300.72, 706.96, 158.47, 18.33);
-        // 9. Date
+        // 10. Signature of Georgina (Office)
+        await drawContent(page3, 'sig', 'sigArbOffice', 304.73, 710.89, 152.9, 16.63);
+        // 11. Date
         await drawContent(page3, 'date', null, 493.93, 704.99, 77.19, 18.33, null, 'sigArbOffice');
 
         // --- PAGE 4 MAPPINGS (Consent) ---
