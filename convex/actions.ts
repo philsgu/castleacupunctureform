@@ -402,7 +402,7 @@ acupuncture services to contact my medical doctor if necessary.`;
             to: [toEmail],
             replyTo: 'philsgu@icloud.com',
             cc: ['philsgu@icloud.com'],
-            subject: `Copy New Patient Paperwork-[${args.lastName}, ${args.firstName}]`,
+            subject: `Copy New Patient Paperwork-${args.lastName}, ${args.firstName}`,
             html: `
         <p>Hello! Thank you for choosing Castle Acupuncture.</p>
         <p>Attached is a copy of the intake form you recently submitted. If any of this information changes or requires a correction, please contact me at <a href="mailto:georginatcm@gmail.com">georginatcm@gmail.com</a>.</p>
