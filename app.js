@@ -65,6 +65,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 toggleFieldGroup('familyHistoryOtherDetails', e.target.checked);
             });
         }
+
+        // Treatment Other Toggle
+        const treatmentOtherCheckbox = document.getElementById('treatmentOtherCheck');
+        if (treatmentOtherCheckbox) {
+            treatmentOtherCheckbox.addEventListener('change', (e) => {
+                toggleFieldGroup('treatmentOtherContainer', e.target.checked);
+            });
+        }
     }
 
     function setupGenderToggle() {

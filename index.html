@@ -204,10 +204,19 @@
                                 Medications</label>
                             <label class="checkbox-pill"><input type="checkbox" name="treatment"
                                     value="Physical Therapy"> Physical Therapy</label>
-                            <label class="checkbox-pill"><input type="checkbox" name="treatment" value="Yes">
-                                Yes</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="treatment" value="Chiropractic">
+                                Chiropractic</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="treatment" value="Massage">
+                                Massage</label>
                             <label class="checkbox-pill"><input type="checkbox" name="treatment" value="Injections">
                                 Injections</label>
+                            <label class="checkbox-pill"><input type="checkbox" name="treatment" value="Other"
+                                    id="treatmentOtherCheck">
+                                Other</label>
+                        </div>
+                        <div id="treatmentOtherContainer" class="hidden mt-2">
+                            <label for="treatmentOtherText">If 'Other', please specify:</label>
+                            <input type="text" id="treatmentOtherText" name="treatmentOtherText" class="mt-1">
                         </div>
                     </div>
                     <div class="input-group">
@@ -233,6 +242,7 @@
                             <option value="25% Better">25% Better</option>
                             <option value="50% Better">50% Better</option>
                             <option value="75% Better">75% Better</option>
+                            <option value="Above 75% Better">Above 75% Better</option>
                         </select>
                     </div>
                 </div>

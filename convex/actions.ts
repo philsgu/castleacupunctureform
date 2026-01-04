@@ -47,6 +47,7 @@ export const submitAndNotify = action({
             currentProblem: "Current health problem(s)",
             problemOnset: "How and When it began",
             treatment: "Treatment received",
+            treatmentOtherText: "Other Treatment",
             workRelated: "Work related?",
             progress: "Progress So Far",
             painArea: "Current Pain Areas",
@@ -261,7 +262,7 @@ acupuncture services to contact my medical doctor if necessary.`;
         // 1. Sig Patient (Top)
         await drawContent(page2, 'sig', 'sigTermsPatient', 87.74, 562.33, 91.29, 22.26);
         // 2. Date
-        await drawContent(page2, 'date', null, 192.89, 558.92, 51.45, 22.26, null, 'sigTermsPatient');
+        await drawContent(page2, 'date', null, 192.89, 558.92, 51.45, 22.26, undefined, 'sigTermsPatient');
         // 3. Sig Rep (Top)
         await drawContent(page2, 'sig', 'sigTermsRep', 322.99, 559.42, 104.69, 22.26);
         // 4. Date
