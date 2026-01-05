@@ -222,7 +222,7 @@ export const submitAndNotify = action({
         drawField("Tobacco Use", data.tobaccoUseRef);
         drawField("Tobacco Type", data.tobaccoType);
         drawField("Tobacco Frequency", data.tobaccoFrequency);
-        drawField("Last Menses Date (if applicable)", data.lastMenses);
+        drawField("Last Menses Date (if applicable)", formatDOB(data.lastMenses));
         drawCombinedField("Family History", Array.isArray(data.familyHistory) ? data.familyHistory : [data.familyHistory]);
         // Family History Relationships
         drawField("Cancer Relationship", data.familyHistoryRel_Cancer);
