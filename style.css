@@ -182,7 +182,7 @@ h2 {
     min-width: 0;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 768px) {
 
     .grid-2,
     .grid-3 {
