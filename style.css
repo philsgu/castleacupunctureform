@@ -176,6 +176,12 @@ h2 {
     grid-template-columns: 1fr 1fr 1fr;
 }
 
+/* Fix for Grid Items overflowing containers on mobile */
+.grid-2>*,
+.grid-3>* {
+    min-width: 0;
+}
+
 @media (max-width: 640px) {
 
     .grid-2,
@@ -283,6 +289,7 @@ textarea {
     background: var(--bg-card);
     box-sizing: border-box;
     max-width: 100%;
+    min-width: 0;
 }
 
 input:focus,
