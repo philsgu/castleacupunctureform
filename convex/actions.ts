@@ -417,8 +417,8 @@ acupuncture services to contact my medical doctor if necessary.`;
         const { error } = await resend.emails.send({
             from: 'Castle Acupuncture <no-reply@castleacupuncture.com>',
             to: [toEmail],
-            replyTo: 'philsgu@icloud.com',
-            cc: ['philsgu@icloud.com'],
+            replyTo: 'georginatcm@gmail.com',
+            cc: ['georginatcm@gmail.com'],
             subject: `Copy New Patient Paperwork-${args.lastName}, ${args.firstName}`,
             html: `
         <p>Hello! Thank you for choosing Castle Acupuncture.</p>
