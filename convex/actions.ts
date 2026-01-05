@@ -272,7 +272,10 @@ acupuncture services to contact my medical doctor if necessary.`;
                 width: 150,
                 height: 40
             });
-            summaryPage.drawText(new Date().toLocaleDateString(), { x: margin + 430, y: y, size: 10, font });
+            const summaryDateStr = new Intl.DateTimeFormat('en-US', {
+                timeZone: 'America/Los_Angeles'
+            }).format(new Date());
+            summaryPage.drawText(summaryDateStr, { x: margin + 430, y: y, size: 10, font });
         }
 
         // --- APPEND TEMPLATE PAGES (2, 3, 4) ---
