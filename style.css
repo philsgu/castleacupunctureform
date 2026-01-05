@@ -306,6 +306,14 @@ input[type="date"] {
     min-height: 48px;
 }
 
+.readonly-date {
+    background-color: #f8fafc !important;
+    color: var(--text-muted);
+    pointer-events: none;
+    cursor: not-allowed;
+    user-select: none;
+}
+
 input:focus,
 select:focus,
 textarea:focus {

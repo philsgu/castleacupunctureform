@@ -132,13 +132,14 @@
                         </div>
                         <div class="input-group">
                             <label for="zip">Zip</label>
-                            <input type="text" id="zip" name="zip" required>
+                            <input type="text" id="zip" name="zip" required pattern="[0-9]{5}" maxlength="5"
+                                inputmode="numeric">
                         </div>
                     </div>
                     <div class="grid-2">
                         <div class="input-group">
                             <label for="email">Email</label>
-                            <input type="email" id="email" name="email" required>
+                            <input type="email" id="email" name="email" required placeholder="example@domain.com">
                         </div>
                         <div class="input-group">
                             <label for="language">Primary Language</label>
@@ -571,7 +572,8 @@
                         <!-- Date Auto-filled -->
                         <div class="input-group" id="sigTermsPatientDateContainer">
                             <label>Date</label>
-                            <input type="date" id="sigTermsPatientDate" name="sigTermsPatientDate" readonly>
+                            <input type="date" id="sigTermsPatientDate" name="sigTermsPatientDate" readonly
+                                class="readonly-date" tabindex="-1">
                         </div>
                     </div>
 
@@ -589,7 +591,8 @@
                         <!-- Date Auto-filled -->
                         <div class="input-group" id="sigTermsRepDateContainer">
                             <label>Date</label>
-                            <input type="date" id="sigTermsRepDate" name="sigTermsRepDate" readonly>
+                            <input type="date" id="sigTermsRepDate" name="sigTermsRepDate" readonly
+                                class="readonly-date" tabindex="-1">
                         </div>
                     </div>
 
@@ -615,7 +618,8 @@
                         </div>
                         <div class="input-group" id="sigPrivacyPatientDateContainer">
                             <label>Date</label>
-                            <input type="date" id="sigPrivacyPatientDate" name="sigPrivacyPatientDate" readonly>
+                            <input type="date" id="sigPrivacyPatientDate" name="sigPrivacyPatientDate" readonly
+                                class="readonly-date" tabindex="-1">
                         </div>
                     </div>
 
@@ -632,7 +636,8 @@
                         </div>
                         <div class="input-group" id="sigPrivacyRepDateContainer">
                             <label>Date</label>
-                            <input type="date" id="sigPrivacyRepDate" name="sigPrivacyRepDate" readonly>
+                            <input type="date" id="sigPrivacyRepDate" name="sigPrivacyRepDate" readonly
+                                class="readonly-date" tabindex="-1">
                         </div>
                     </div>
                 </div>
@@ -724,7 +729,8 @@
                             </div>
                             <div class="input-group">
                                 <label>Date</label>
-                                <input type="date" id="sigArbPatientDate" name="sigArbPatientDate" readonly>
+                                <input type="date" id="sigArbPatientDate" name="sigArbPatientDate" readonly
+                                    class="readonly-date" tabindex="-1">
                             </div>
                         </div>
                     </div>
@@ -747,7 +753,8 @@
                             </div>
                             <div class="input-group">
                                 <label>Date</label>
-                                <input type="date" id="sigArbGuardianDate" name="sigArbGuardianDate" readonly>
+                                <input type="date" id="sigArbGuardianDate" name="sigArbGuardianDate" readonly
+                                    class="readonly-date" tabindex="-1">
                             </div>
                         </div>
                     </div>
@@ -769,7 +776,8 @@
                             </div>
                             <div class="input-group">
                                 <label>Date</label>
-                                <input type="date" id="sigArbOfficeDate" name="sigArbOfficeDate" readonly>
+                                <input type="date" id="sigArbOfficeDate" name="sigArbOfficeDate" readonly
+                                    class="readonly-date" tabindex="-1">
                             </div>
                         </div> <!-- End Grid for Office Sig -->
                     </div> <!-- End Grid-2 Office -->
@@ -837,7 +845,8 @@
                             </div>
                             <div class="input-group">
                                 <label>Date</label>
-                                <input type="date" id="sigConsentPatientDate" name="sigConsentPatientDate" readonly>
+                                <input type="date" id="sigConsentPatientDate" name="sigConsentPatientDate" readonly
+                                    class="readonly-date" tabindex="-1">
                             </div>
                         </div>
                     </div>

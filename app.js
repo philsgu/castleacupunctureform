@@ -399,6 +399,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const inputs = document.querySelectorAll('input, select, textarea');
 
         inputs.forEach(input => {
+            // Specific cleaner for zip code
+            if (input.id === 'zip') {
+                input.addEventListener('input', (e) => {
+                    e.target.value = e.target.value.replace(/\D/g, '').substring(0, 5);
+                });
+            }
+
             if (input.hasAttribute('required')) {
                 // On blur: check if empty and highlight
                 input.addEventListener('blur', () => {
@@ -435,6 +442,15 @@ document.addEventListener('DOMContentLoaded', () => {
         } else if (input.id === 'cellPhone' || input.id === 'otherPhone') {
             const digits = val.replace(/\D/g, '');
             if (digits.length > 0 && digits.length < 10) {
+                isValid = false;
+            }
+        } else if (input.id === 'zip') {
+            if (val.length !== 5) {
+                isValid = false;
+            }
+        } else if (input.type === 'email') {
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(val)) {
                 isValid = false;
             }
         }
@@ -534,7 +550,22 @@ document.addEventListener('DOMContentLoaded', () => {
             } else if (input.type === 'checkbox') {
                 if (!input.checked) isFieldValid = false;
             } else {
-                if (!input.value.trim()) isFieldValid = false;
+                const val = input.value.trim();
+                if (!val) {
+                    isFieldValid = false;
+                } else if (input.id === 'zip' && val.length !== 5) {
+                    isFieldValid = false;
+                } else if (input.type === 'email') {
+                    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                    if (!emailRegex.test(val)) {
+                        isFieldValid = false;
+                    }
+                } else if (input.id === 'cellPhone' || input.id === 'otherPhone') {
+                    const digits = val.replace(/\D/g, '');
+                    if (digits.length > 0 && digits.length < 10) {
+                        isFieldValid = false;
+                    }
+                }
             }
 
             const inputGroup = input.closest('.input-group');
