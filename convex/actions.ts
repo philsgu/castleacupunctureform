@@ -352,7 +352,7 @@ acupuncture services to contact my medical doctor if necessary.`;
         // 3. Sig Rep (Top)
         await drawContent(page2, 'sig', 'sigTermsRep', 322.99, 559.42, 104.69, 22.26);
         // 4. Date
-        await drawContent(page2, 'date', null, 442.92, 559.22, 49.64, 23.26, undefined, 'sigTermsRep');
+        await drawContent(page2, 'date', null, 432.71, 559.22, 49.64, 23.26, undefined, 'sigTermsRep');
         // 5. Patient Name (Bottom - Acknowledgement)
         await drawContent(page2, 'text', 'privacyName', 79.34, 627.9, 176.68, 17.97);
         // 6. Sig Patient (Bottom - Acknowledgement)
