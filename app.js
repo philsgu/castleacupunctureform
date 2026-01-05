@@ -383,7 +383,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
             // Set Date
             if (sigDate) {
-                sigDate.value = new Date().toISOString().split('T')[0];
+                const todayPST = new Intl.DateTimeFormat('en-CA', {
+                    timeZone: 'America/Los_Angeles',
+                    year: 'numeric',
+                    month: '2-digit',
+                    day: '2-digit'
+                }).format(new Date());
+                sigDate.value = todayPST;
             }
         }
     }
