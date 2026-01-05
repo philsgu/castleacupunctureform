@@ -844,8 +844,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 // 4. Auto-populate Date if field exists
                 if (signatureDateInput) {
-                    const today = new Date().toISOString().split('T')[0];
-                    signatureDateInput.value = today;
+                    const todayPST = new Intl.DateTimeFormat('en-CA', {
+                        timeZone: 'America/Los_Angeles',
+                        year: 'numeric',
+                        month: '2-digit',
+                        day: '2-digit'
+                    }).format(new Date());
+                    signatureDateInput.value = todayPST;
                 }
             }
         } else {

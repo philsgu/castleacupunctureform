@@ -323,7 +323,9 @@ acupuncture services to contact my medical doctor if necessary.`;
                 }
 
                 if (shouldDrawDate) {
-                    const dateStr = new Date().toLocaleDateString();
+                    const dateStr = new Intl.DateTimeFormat('en-US', {
+                        timeZone: 'America/Los_Angeles'
+                    }).format(new Date());
                     page.drawText(dateStr, { x: left, y: y + (h / 4), size: 10, font });
                 }
             } else if (type === 'text') {
